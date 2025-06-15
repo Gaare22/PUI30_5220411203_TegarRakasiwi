@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <form method="POST" enctype="multipart/form-data" id="ujiForm">
+  {% csrf_token %}
+
+  <input type="hidden" name="aksi" id="aksi" value="preview">  <!-- penanda aksi -->
+
+  <label for="sumber_data">Pilih Data yang Digunakan:</label>
+  <select name="sumber_data" id="sumber_data" onchange="handleSourceChange(this)">
+    <option value="">-- Pilih Data --</option>
+    <option value="train" {% if selected_source == "train" %}selected{% endif %}>Data Pelatihan</option>
+    <option value="test" {% if selected_source == "test" %}selected{% endif %}>Data Pengujian</option>
+    <option value="csv" {% if selected_source == "csv" %}selected{% endif %}>Import CSV</option>
+  </select>
+
+  <input type="file" name="csv_file" id="csv_file" accept=".csv" style="display: none;" onchange="submitCSVPreview()">
+
+  <br><br>
+  <button type="submit" onclick="document.getElementById('aksi').value='uji';">UJI DATA</button>
+</form>
+
+<!-- Tampilkan Data -->
+{% if data_preview %}
+  <h4>Data yang Diuji:</h4>
+  {{ data_preview|safe }}
+{% endif %}
+
+<!-- Tampilkan Akurasi -->
+{% if accuracy %}
+  <h4>Akurasi Pengujian:</h4>
+  <p>{{ accuracy }}</p>
+{% endif %}
+
+{% if error %}
+  <p style="color:red;">{{ error }}</p>
+{% endif %}
+
+<script>
+  function handleSourceChange(selectEl) {
+    const aksiInput = document.getElementById('aksi');
+    aksiInput.value = 'preview'; // tanda untuk preview data
+    if (selectEl.value === 'csv') {
+      document.getElementById("csv_file").click();
+    } else {
+      document.getElementById("ujiForm").submit();
+    }
+  }
+
+  function submitCSVPreview() {
+    document.getElementById('aksi').value = 'preview';
+    document.getElementById('ujiForm').submit();
+  }
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,485 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Home</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+      <!-- style css -->
+      <link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+      <!-- fevicon -->
+      <link rel="icon" href="{% static 'img/fevicon.png' %}" type="image/gif" />
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+
+      <style>
+        .container {
+            background: #d3d3d3;
+            padding: 20px;
+            border-radius: 10px;
+            width: 95%;
+            margin: auto;
+        }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .form-group label {
+            width: 40%;
+            font-weight: bold;
+        }
+        .form-group input{
+            width: 60%;
+            padding: 5px;
+        }
+        .form-group select {
+            width: 63%;
+            padding: 5px;
+        }
+        .question {
+            margin-bottom: 10px;
+            margin-top: 15px;
+        }
+        .radio-group {
+            display: flex;
+            gap: 100px; /* Menambah jarak antar radio button */
+            align-items: center;
+        }
+        .radio-group input {
+            margin-right: 15px; /* Menambah jarak antara radio button dan teks */
+        }
+        .buttons {
+            display: flex;
+            /* justify-content: space-between; */
+            justify-content: end;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: black;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        p, label{
+            font-size: 14px;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .upload-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f9f9f9;
+        }
+
+        .custom-file-upload {
+        padding: 10px 20px;
+        border: none;
+        background: black;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-right: 15px;
+        }
+
+        .custom-file-upload:hover, .submit:hover, .single-data:hover{
+        background-color: #f0390f;
+        }
+
+        input[type="file"] {
+        display: none;
+        }
+      </style>
+   </head>
+   <!-- body -->
+   <body class="main-layout">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-success">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+      <!-- header -->
+      <div class="header">
+         <div class="container-fluid">
+            <div class="row d_flex">
+               <div class=" col-md-2 col-sm-3 col logo_section">
+                  <div class="full">
+                     <div class="center-desk">
+                        <div class="logo">
+                           <a href="/"><img src="{% static 'img/gabel_logo1.png' %}" alt="#" /></a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-8 col-sm-12">
+                  <nav class="navigation navbar navbar-expand-md navbar-dark ">
+                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                     <span class="navbar-toggler-icon"></span>
+                     </button>
+                     <div class="collapse navbar-collapse" id="navbarsExample04">
+                        <ul class="navbar-nav mr-auto">
+                           <li class="nav-item">
+                              <a class="nav-link" href="/homeadmin/">Home</a>
+                           </li>
+                           <li class="nav-item active">
+                              <a class="nav-link" href="/input_data/">Input Data</a>
+                           </li>
+                           <li class="nav-item">
+                              <a class="nav-link" href="/pelatihan/">Pelatihan</a>
+                           </li>
+                           <li class="nav-item">
+                              <a class="nav-link" href="/pengujian/">Pengujian</a>
+                           </li>
+                           <li class="nav-item">
+                              <a class="nav-link" href="/prediksi_admin/">Prediksi</a>
+                           </li>
+                        </ul>
+                     </div>
+                  </nav>
+               </div>
+
+               <div class=" col-md-2 col-sm-3 col logo_section" style="margin-left: 1000px; margin-top: -50px;">
+                  <nav class="navigation navbar navbar-expand-md navbar-dark ">
+                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                     <span class="navbar-toggler-icon"></span>
+                     </button>
+                     <div class="collapse navbar-collapse" id="navbarsExample04">
+                        <ul class="navbar-nav mr-auto">
+                           <li class="nav-item">
+                              <a class="nav-link" href="/">Logout</a>
+                           </li>
+                        </ul>
+                     </div>
+                  </nav>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <br>
+      <br>
+      <br>
+      <hr style="border-top: 2px solid #f0390f; border-bottom: 0;">
+      <br>
+      <!-- end header inner -->
+      <!-- end header -->
+      <!-- top -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <button class="single-data" onclick="showForm('Single-Data')" style="margin-left: -150px;">Single-Data</button>
+            <!-- Form Import CSV (terpisah)  -->
+            <form action="{% url 'import_csv' %}" method="post" enctype="multipart/form-data" style="margin-top: -45px; margin-left: 150px;">
+                {% csrf_token %}
+                <label for="csv-upload" class="custom-file-upload">
+                Import From CSV
+                </label>
+                <input type="file" id="csv-upload" name="csv_file" accept=".csv" onchange="this.form.submit()">
+            </form>
+        </div>
+        <div id="formA" class="container" style="display: none;">
+            <div class="container">
+                <form action="" method="POST"> {% csrf_token %}
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>NAMA :</label>
+                            <input type="text" name="nama">
+                        </div>
+                        <div class="form-group">
+                            <label>USIA :</label>
+                            <input type="text" name="usia">
+                        </div>
+                        <div class="form-group">
+                            <label>JENIS KELAMIN :</label>
+                            <!-- <input type="text" name="jenis_kelamin"> -->
+                            <select name="jenis_kelamin">
+                                <option value="" disabled selected>--Pilih Jenis Kelamin--</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>KELAS :</label>
+                            <input type="text" name="kelas">
+                        </div>
+                        <div class="form-group">
+                            <label for="jurusan">JURUSAN :</label>
+                            <select id="jurusan" name="jurusan" required>
+                                <option value="" disabled selected>--Pilih Jurusan--</option>
+                                <option value="Administrasi Perkantoran">Administrasi Perkantoran</option>
+                                <option value="Akuntansi">Akuntansi</option>
+                                <option value="Bahasa">Bahasa</option>
+                                <option value="Desain dan Produksi Kriya">Desain dan Produksi Kriya</option>
+                                <option value="Desain Komunikasi Visual">Desain Komunikasi Visual</option>
+                                <option value="Desain Pemodelan dan Informasi Bangunan">Desain Pemodelan dan Informasi Bangunan</option>
+                                <option value="Farmasi">Farmasi</option>
+                                <option value="IPA">IPA</option>
+                                <option value="IPS">IPS</option>
+                                <option value="Keperawatan">Keperawatan</option>
+                                <option value="Kurikulum Merdeka">Kurikulum Merdeka</option>
+                                <option value="Multimedia">Multimedia</option>
+                                <option value="Nautika Kapal Penangkap Ikan">Nautika Kapal Penangkap Ikan</option>
+                                <option value="Rekayasa Perangkat Lunak">Rekayasa Perangkat Lunak</option>
+                                <option value="Teknik Sepeda Motor">Teknik Sepeda Motor</option>
+                                <option value="Siswa Menengah Pertama">Siswa Menengah Pertama (SMP)</option>
+                                <option value="Teknik Instalasi Tenaga Listrik">Teknik Instalasi Tenaga Listrik</option>
+                                <option value="Teknik Jaringan Komputer & Telekomunikasi">Teknik Jaringan Komputer & Telekomunikasi</option>
+                                <option value="Teknik Kendaraan Ringan">Teknik Kendaraan Ringan</option>
+                                <option value="Teknik Mesin">Teknik Mesin</option>
+                                <option value="Teknik Otomotif">Teknik Otomotif</option>
+                                <option value="Teknik Pengelasan">Teknik Pengelasan</option>
+                                <option value="Lainnya">Lainnya</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>ASAL SEKOLAH :</label>
+                            <input type="text" name="asal_sekolah">
+                        </div>
+                    </div>
+
+                    <hr style="border-top: 2px solid #000; border-bottom: 0;">
+
+                    <div class="question">
+                        <p>1. Saya lebih mudah memahami materi jika disajikan dalam bentuk gambar, diagram, atau peta konsep.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P1" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P1" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P1" value="3"> Netral</label>
+                            <label><input type="radio" name="P1" value="4"> Setuju</label>
+                            <label><input type="radio" name="P1" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>2. Saya lebih suka mendengarkan penjelasan guru daripada membaca buku sendiri.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P2" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P2" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P2" value="3"> Netral</label>
+                            <label><input type="radio" name="P2" value="4"> Setuju</label>
+                            <label><input type="radio" name="P2" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>3. Saya lebih cepat memahami sesuatu jika saya langsung mencobanya sendiri.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P3" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P3" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P3" value="3"> Netral</label>
+                            <label><input type="radio" name="P3" value="4"> Setuju</label>
+                            <label><input type="radio" name="P3" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>4. Jika saya membaca buku, saya lebih suka melihat ilustrasi atau grafik yang membantu menjelaskan isi teks.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P4" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P4" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P4" value="3"> Netral</label>
+                            <label><input type="radio" name="P4" value="4"> Setuju</label>
+                            <label><input type="radio" name="P4" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>5. Saya lebih mudah mengingat informasi yang saya dengar daripada yang saya baca.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P5" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P5" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P5" value="3"> Netral</label>
+                            <label><input type="radio" name="P5" value="4"> Setuju</label>
+                            <label><input type="radio" name="P5" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>6. Saya suka belajar dengan bergerak, seperti melakukan praktik, menulis ulang catatan, atau menggunakan alat bantu fisik. </p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P6" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P6" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P6" value="3"> Netral</label>
+                            <label><input type="radio" name="P6" value="4"> Setuju</label>
+                            <label><input type="radio" name="P6" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>7. Saya lebih suka menonton video materi atau presentasi bergambar daripada hanya membaca buku teks.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P7" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P7" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P7" value="3"> Netral</label>
+                            <label><input type="radio" name="P7" value="4"> Setuju</label>
+                            <label><input type="radio" name="P7" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>8. Saya sering mengulangi informasi dengan berbicara sendiri atau mengajarkannya kepada orang lain.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P8" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P8" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P8" value="3"> Netral</label>
+                            <label><input type="radio" name="P8" value="4"> Setuju</label>
+                            <label><input type="radio" name="P8" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>9. Saya suka belajar melalui praktik langsung, seperti eksperimen atau simulasi.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P9" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P9" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P9" value="3"> Netral</label>
+                            <label><input type="radio" name="P9" value="4"> Setuju</label>
+                            <label><input type="radio" name="P9" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>10. Saya lebih suka membuat ringkasan dengan menggunakan warna dan simbol daripada hanya menulis teks panjang.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P10" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P10" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P10" value="3"> Netral</label>
+                            <label><input type="radio" name="P10" value="4"> Setuju</label>
+                            <label><input type="radio" name="P10" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>11. Saya sering menggunakan nada atau ritme tertentu untuk mengingat sesuatu.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P11" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P11" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P11" value="3"> Netral</label>
+                            <label><input type="radio" name="P11" value="4"> Setuju</label>
+                            <label><input type="radio" name="P11" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>12. Saya lebih suka menggunakan tangan atau alat bantu untuk memahami sesuatu dibandingkan hanya mendengarkan penjelasan.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P12" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P12" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P12" value="3"> Netral</label>
+                            <label><input type="radio" name="P12" value="4"> Setuju</label>
+                            <label><input type="radio" name="P12" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>13. Saat belajar saya lebih suka menggunakan mind map atau diagram dibandingkan mencatat yang hanya tulisan saja.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P13" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P13" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P13" value="3"> Netral</label>
+                            <label><input type="radio" name="P13" value="4"> Setuju</label>
+                            <label><input type="radio" name="P13" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>14. Saat belajar saya lebih suka membuat rekaman pribadi untuk di dengarkan kembali.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P14" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P14" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P14" value="3"> Netral</label>
+                            <label><input type="radio" name="P14" value="4"> Setuju</label>
+                            <label><input type="radio" name="P14" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <p>15. Saat belajar saya lebih memahami konsep dengan melakukan eksperimen, simulasi, atau praktik langsung.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="P15" value="1"> Sangat Tidak Setuju</label>
+                            <label><input type="radio" name="P15" value="2"> Tidak Setuju</label>
+                            <label><input type="radio" name="P15" value="3"> Netral</label>
+                            <label><input type="radio" name="P15" value="4"> Setuju</label>
+                            <label><input type="radio" name="P15" value="5"> Sangat Setuju</label>
+                        </div>
+                    </div>
+
+                    <hr style="border-top: 2px solid #000; border-bottom: 0;">
+
+                    <div class="question">
+                        <p>Gaya Belajar Pada Siswa Adalah.</p>
+                        <div class="radio-group">
+                            <label><input type="radio" name="real_target" value="Visual"> Visual</label>
+                            <label><input type="radio" name="real_target" value="Auditori"> Auditori</label>
+                            <label><input type="radio" name="real_target" value="Kinestetik"> Kinestetik</label>
+                        </div>
+                    </div>
+
+                    <br>
+                    <br>
+                    <hr style="border-top: 2px solid #000; border-bottom: 0;">
+
+                    <div class="buttons">
+                        <button class="submit" type="submit">KIRIM</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      <!-- end banner -->
+      
+      <!--  footer -->
+      <!-- end footer -->
+      <!-- Javascript files-->
+      <script src="{% static 'js/jquery.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+      <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+      <!-- sidebar -->
+      <script src="{% static 'js/custom.js' %}"></script>
+      <script>
+         AOS.init();
+
+         function showForm(option) {
+            if (option === 'Single-Data') {
+                document.getElementById("formA").style.display = "block";
+            } else {
+                document.getElementById("formA").style.display = "none";
+                alert("Form B belum tersedia.");
+            }
+        }
+        // setTimeout(function() {
+        //     window.location.href = "/admin";
+        // }, 10000);
+      </script>
+   </body>
+</html>
