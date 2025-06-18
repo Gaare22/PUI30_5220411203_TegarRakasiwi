@@ -14,9 +14,12 @@ def index(request):
             form.save()
             messages.success(request, "Data berhasil disimpan.")
             return HttpResponseRedirect('/input_data')
+        else:
+            messages.error(request, 'Gagal Input Data')
         
     else:
         form = InputDataForm()
+
     return render(request, 'input_data/index.html', {'form': form})
 
 def import_csv(request):
