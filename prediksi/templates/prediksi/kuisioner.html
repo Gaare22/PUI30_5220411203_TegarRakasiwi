@@ -120,17 +120,27 @@
         input[type="file"] {
         display: none;
         }
+
+        .alert-error {
+            color: #000000;
+            background-color: red;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
       </style>
    </head>
    <!-- body -->
    <body class="main-layout">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert-success">
+                <div class="alert-{{ message.tags }}">
                     {{ message }}
                 </div>
             {% endfor %}
         {% endif %}
+        
       <!-- header -->
       <div class="header">
          <div class="container-fluid">
@@ -494,6 +504,14 @@
             }
             }
         });
+        });
+
+            document.addEventListener("DOMContentLoaded", function() {
+            const alertBox = document.querySelector('.alert-error');
+            if (alertBox) {
+                const msg = alertBox.textContent.trim();
+                showPopup("⚠️ " + msg);
+            }
         });
         </script>
 

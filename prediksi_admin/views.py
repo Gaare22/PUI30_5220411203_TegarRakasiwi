@@ -1,16 +1,29 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 from .models import InputData, PrediksiGayaBelajar, gaya_belajar
-from sklearn.naive_bayes import CategoricalNB
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
 from django.conf import settings
+from django.contrib import messages
 import pandas as pd
 import os
 import joblib
 
+#lokasi model
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path_model = os.path.join(settings.BASE_DIR, 'tmp', 'model.pkl')
+path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
+
 def prediksi_view(request):
     if request.method == 'POST':
+        if not os.path.exists(path_model):
+            messages.error(request, "Model Belum dibuat")
+            return render(request, 'prediksi/kuisioner.html')
+
+        try:
+            model = joblib.load(path_model)
+
+        except Exception as e:
+            messages.error(request, f"Terjadi kesalahan saat memuat model: {str(e)}")
+            return render(request, 'prediksi/kuisioner.html')
+        
         # Ambil data dari POST
         nama = request.POST.get('nama')
         usia = int(request.POST.get('usia'))
@@ -67,9 +80,6 @@ def prediksi_view(request):
 
         jurusan_encoded = jurusan_map.get(jurusan, -1)
         jenis_kelamin_encoded = jenis_kelamin_map.get(jenis_kelamin, -1)
-
-        path_model = os.path.join(settings.BASE_DIR, 'tmp', 'model.pkl')
-        path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
 
         model = joblib.load(path_model)
         split_data = joblib.load(path_split_data)
