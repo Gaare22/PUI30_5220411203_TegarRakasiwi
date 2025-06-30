@@ -83,12 +83,11 @@ def index(request):
             "Siswa Menengah Pertama": 14,
             "Teknik Instalasi Tenaga Listrik": 15,
             "Teknik Jaringan Komputer & Telekomunikasi": 16,
-            "Teknik Kendaraan Ringan": 17,
+            "Teknik Kendaraan Ringan Otomotif": 17,
             "Teknik Mesin": 18,
-            "Teknik Otomotif": 19,
-            "Teknik Pengelasan": 20,
-            "Teknik Sepeda Motor": 21,
-            "Lainnya": 22,
+            "Teknik Pengelasan": 19,
+            "Teknik Sepeda Motor": 20,
+            "Lainnya": 21,
         }
 
         jenis_kelamin_map = {
