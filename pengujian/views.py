@@ -9,12 +9,13 @@ from sklearn.naive_bayes import CategoricalNB, GaussianNB
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.preprocessing import LabelEncoder
 from django.core.files.storage import FileSystemStorage
+from django.contrib.auth.decorators import login_required
 
 # Lokasi file split data
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPLIT_PATH = os.path.join(BASE_DIR, 'tmp/split_data.pkl')
 
-
+@login_required
 def index(request):
     context = {
         'data_preview': None,

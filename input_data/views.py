@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import InputDataForm
 from django.contrib import messages
@@ -6,7 +7,7 @@ import csv
 from .models import InputData
 
 # Create your views here.
-
+@login_required
 def index(request):
     if request.method == 'POST':
         form = InputDataForm(request.POST)
