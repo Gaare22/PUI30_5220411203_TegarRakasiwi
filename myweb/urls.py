@@ -30,6 +30,7 @@ urlpatterns = [
     path('prediksi/', include('prediksi.urls')),
     path('homeadmin/', include('homeadmin.urls')),
     path('prediksi_admin/', include('prediksi_admin.urls')),
+    path('perhitungan/', include('perhitungan.urls')),
 ]
 
 if settings.DEBUG:

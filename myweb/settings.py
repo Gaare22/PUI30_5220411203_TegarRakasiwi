@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'pengujian',
     'prediksi',
     'homeadmin',
-    'prediksi_admin'
+    'prediksi_admin',
+    'perhitungan'
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = '/admin/login/'
 
-SESSION_COOKIE_AGE = 30  # hanya 30 detik
+SESSION_COOKIE_AGE = 120  # waktu 120 detik / 2 menit
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = False  # jangan reset waktu tiap ada request

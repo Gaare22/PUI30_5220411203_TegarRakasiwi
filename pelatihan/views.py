@@ -24,7 +24,7 @@ def index(request):
     int_split_input = None
 
     if request.method == "POST":
-        split_input = float(request.POST.get("split", 70)) 
+        split_input = float(request.POST.get("split", 80)) 
         split_ratio = split_input / 100
         source = request.POST.get("source")  # 'csv' atau 'database'
 
@@ -117,7 +117,6 @@ def index(request):
 
         # Split data
         X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=split_ratio, random_state=42, shuffle=True, stratify=y)
-
 
         # Simpan hasil split sementara
         split_data = {
