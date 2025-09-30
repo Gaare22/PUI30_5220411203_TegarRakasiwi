@@ -5,6 +5,7 @@ from django.contrib import messages
 import pandas as pd
 import os
 import joblib
+import re
 
 #lokasi model
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,9 +27,21 @@ def prediksi_view(request):
 
         # Ambil data dari POST
         nama = request.POST.get('nama')
-        usia = int(request.POST.get('usia'))
+        usia_str = request.POST.get('usia')
+
+        if not usia_str.isdigit():
+            messages.error(request, "Usia hanya boleh berisi angka, tidak boleh huruf atau simbol.")
+            return render(request, 'prediksi/kuisioner.html')
+        
+        usia = int(usia_str)
         jenis_kelamin = request.POST.get('jenis_kelamin')
-        kelas = request.POST.get('kelas')
+        kelas_str = request.POST.get('kelas')
+
+        if not kelas_str.isdigit():
+            messages.error(request, "Kelas hanya boleh berupa angka 7 sampai 12")
+            return render(request, 'prediksi/kuisioner.html')
+
+        kelas = int(kelas_str)
         jurusan = request.POST.get('jurusan')
         asal_sekolah = request.POST.get('asal_sekolah')
         P1 = request.POST.get('P1')
@@ -47,6 +60,37 @@ def prediksi_view(request):
         P14 = request.POST.get('P14')
         P15 = request.POST.get('P15')
 
+        print("DEBUG jurusan dari form:", repr(jurusan))
+
+        # validasi nama
+        if not re.match(r'^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$', nama):
+            messages.error(request, "Nama hanya boleh berisi huruf dan spasi, tidak boleh angka atau simbol.")
+            return render(request, 'prediksi/kuisioner.html')
+        
+        # validasi usia
+        if usia > 18:
+            messages.error(request, "Umur Pelajar melewati 18 Tahun. Sistem Hanya digunakan untuk pelajar berusia 12 - 18 Tahun.")
+            return render(request, "prediksi/kuisioner.html")
+        
+        if usia < 12:
+            messages.error(request, "Umur Pelajar kurang dari 12 Tahun. Sistem Hanya digunakan untuk pelajar berusia 12 - 18 Tahun.")
+            return render(request, "prediksi/kuisioner.html")
+        
+        # validasi kelas
+        if kelas < 7 or kelas > 12:
+            messages.error(request, "Kelas hanya boleh berupa angka 7 sampai 12")
+            return render(request, 'prediksi/kuisioner.html')
+        
+        # validasi sekolah
+        if not re.match(r'^[A-Za-z0-9À-ÖØ-öø-ÿ\s]+$', asal_sekolah):
+            messages.error(request, "Nama sekolah hanya boleh huruf, angka, dan spasi (tanpa simbol)")
+            return render(request, 'prediksi/kuisioner.html')
+        
+        if kelas in [7,8,9]:
+            jurusan = "Siswa Menengah Pertama"
+        else:
+            jurusan = request.POST.get('jurusan')
+
         #mapping jurusan (Encode)
         jurusan_map = {
             "Administrasi Perkantoran": 0,
@@ -58,7 +102,7 @@ def prediksi_view(request):
             "Farmasi": 6,
             "IPA": 7,
             "IPS": 8,
-            "KEPERAWATAN": 9,
+            "Keperawatan": 9,
             "Kurikulum Merdeka": 10,
             "Multimedia": 11,
             "Nautika Kapal Penangkap Ikan": 12,

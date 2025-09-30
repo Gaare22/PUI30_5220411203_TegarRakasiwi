@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from .models import InputData, PrediksiGayaBelajar, gaya_belajar
+from .models_adm import InputData, PrediksiGayaBelajar, gaya_belajar
 from django.conf import settings
 from django.contrib import messages
 import pandas as pd
 import os
 import joblib
 from django.contrib.auth.decorators import login_required
+import re
 
 #lokasi model
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -17,20 +18,32 @@ def prediksi_view(request):
     if request.method == 'POST':
         if not os.path.exists(path_model):
             messages.error(request, "Model Belum dibuat")
-            return render(request, 'prediksi/kuisioner.html')
+            return render(request, 'prediksi_admin/kuisioner.html')
 
         try:
             model = joblib.load(path_model)
 
         except Exception as e:
             messages.error(request, f"Terjadi kesalahan saat memuat model: {str(e)}")
-            return render(request, 'prediksi/kuisioner.html')
+            return render(request, 'prediksi_admin/kuisioner.html')
         
         # Ambil data dari POST
         nama = request.POST.get('nama')
-        usia = int(request.POST.get('usia'))
+        usia_str = request.POST.get('usia')
+
+        if not usia_str.isdigit():
+            messages.error(request, "Usia hanya boleh berisi angka, tidak boleh huruf atau simbol.")
+            return render(request, "prediksi_admin/kuisioner.html")
+        
+        usia = int(usia_str)
         jenis_kelamin = request.POST.get('jenis_kelamin')
-        kelas = request.POST.get('kelas')
+        kelas_str = request.POST.get('kelas')
+
+        if not kelas_str.isdigit():
+            messages.error(request, "Kelas hanya boleh berupa angka 7 sampai 12")
+            return render(request, "prediksi_admin/kuisioner.html")
+        
+        kelas = int(kelas_str)
         jurusan = request.POST.get('jurusan')
         asal_sekolah = request.POST.get('asal_sekolah')
         P1 = request.POST.get('P1')
@@ -48,6 +61,35 @@ def prediksi_view(request):
         P13 = request.POST.get('P13')
         P14 = request.POST.get('P14')
         P15 = request.POST.get('P15')
+
+        # validasi nama
+        if not re.match(r'^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$', nama):
+            messages.error(request, "Nama hanya boleh berisi huruf dan spasi, tidak boleh angka atau simbol.")
+            return render(request, 'prediksi_admin/kuisioner.html')
+        
+        # validasi usia
+        if usia > 18:
+            messages.error(request, "Umur Pelajar melewati 18 Tahun. Sistem Hanya digunakan untuk pelajar berusia 12 - 18 Tahun.")
+            return render(request, "prediksi_admin/kuisioner.html")
+        
+        if usia < 12:
+            messages.error(request, "Umur Pelajar kurang dari 12 Tahun. Sistem Hanya digunakan untuk pelajar berusia 12 - 18 Tahun.")
+            return render(request, "prediksi_admin/kuisioner.html")
+        
+        # validasi kelas
+        if kelas < 7 or kelas > 12:
+            messages.error(request, "Kelas hanya boleh berupa angka 7 sampai 12")
+            return render(request, 'prediksi_admin/kuisioner.html')
+        
+        # validasi sekolah
+        if not re.match(r'^[A-Za-z0-9À-ÖØ-öø-ÿ\s]+$', asal_sekolah):
+            messages.error(request, "Nama sekolah hanya boleh huruf, angka, dan spasi (tanpa simbol)")
+            return render(request, 'prediksi_admin/kuisioner.html')
+        
+        if kelas in [7,8,9]:
+            jurusan = "Siswa Menengah Pertama"
+        else:
+            jurusan = request.POST.get('jurusan')
 
         jurusan_map = {
             "Administrasi Perkantoran": 0,
@@ -79,11 +121,11 @@ def prediksi_view(request):
             "Perempuan": 1,
         }
 
-        jurusan_encoded = jurusan_map.get(jurusan, -1)
-        jenis_kelamin_encoded = jenis_kelamin_map.get(jenis_kelamin, -1)
-
         model = joblib.load(path_model)
         split_data = joblib.load(path_split_data)
+
+        jurusan_encoded = jurusan_map.get(jurusan, -1)
+        jenis_kelamin_encoded = jenis_kelamin_map.get(jenis_kelamin, -1)
 
         fitur_input = [
             jenis_kelamin_encoded,
@@ -95,8 +137,8 @@ def prediksi_view(request):
 
         # Lakukan prediksi
         feature_names = split_data['fitur']
-
         input_df = pd.DataFrame([fitur_input], columns=feature_names)
+       
         hasil = model.predict(input_df)[0]
 
         if hasil == "Auditori":

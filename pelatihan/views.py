@@ -12,6 +12,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.naive_bayes import CategoricalNB, GaussianNB
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 # Create your views here.
 @login_required
@@ -166,13 +167,24 @@ def get_data_database(request):
     if not data_queryset:
         return JsonResponse({'success': False})
     
+    # columns = list(data_queryset[0].keys())
+    # rows = [list(item.values()) for item in data_queryset]
+
+    # Ambil parameter halaman dari query string (?page=2)
+    page_number = request.GET.get("page", 1)
+    paginator = Paginator(list(data_queryset), 25)  # 25 data per halaman
+
+    page_obj = paginator.get_page(page_number)
+
     columns = list(data_queryset[0].keys())
-    rows = [list(item.values()) for item in data_queryset]
+    rows = [list(item.values()) for item in page_obj.object_list]
 
     return JsonResponse({
         'success' : True,
         'columns': columns,
-        'rows' : rows
+        'rows' : rows,
+        'num_pages': paginator.num_pages,
+        'current_page': page_obj.number
     })
 
 def upload_csv_view(request):

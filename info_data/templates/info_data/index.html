@@ -89,27 +89,27 @@
       .pagination {
         margin-top: 15px; /* jarak atas tabel */
         margin-bottom: 10px;
-      }
+        }
 
-      .pagination .page-link {
+        .pagination .page-link {
         border-radius: 8px;
         margin: 0 6px;        /* jarak antar tombol diperbesar */
         padding: 8px 16px;    /* tombol lebih lebar */
         color: black;
-      }
+        }
 
-      .pagination .page-item.active .page-link {
+        .pagination .page-item.active .page-link {
         background-color: #f0390f;
         border-color: #f0390f;
         color: white;
-      }
+        }
 
-      .pagination .page-link:hover {
+        .pagination .page-link:hover {
         background-color: #f0390f;   /* merah saat hover */
         color: white;
         border-color: #f0390f;
-      }
-      
+        }
+
       </style>
    </head>
    <!-- body -->
@@ -139,13 +139,13 @@
                            <li class="nav-item">
                               <a class="nav-link" href="/homeadmin/">Home</a>
                            </li>
-                           <li class="nav-item">
+                           <li class="nav-item active">
                               <a class="nav-link" href="/info_data/">Data</a>
                            </li>
                            <li class="nav-item">
                               <a class="nav-link" href="/input_data/">Input Data</a>
                            </li>
-                           <li class="nav-item active">
+                           <li class="nav-item">
                               <a class="nav-link" href="/pelatihan/">Pelatihan</a>
                            </li>
                            <li class="nav-item">
@@ -166,6 +166,7 @@
                   </nav>
                </div>
 
+
             </div>
          </div>
       </div>
@@ -180,10 +181,10 @@
       <div class="container-fluid py-4">
         <div class="row">
           <!-- Kolom Kiri -->
-          <div class="col-md-8">
-            <div id="data-box" class="box large-box data-tampilan">
-              <h5 class="mb-4">DATA YANG AKAN DILATIH</h5>
-              <div class="data-table mx-auto w-100" style="max-height: 380px; overflow: auto;">
+          <div class="col-md-8" style="padding-left: 45px;">
+            <div id="data-box" class="box large-box data-tampilan" style="margin-top: 30px; width: 1150px;">
+              <h5 class="mb-4">INFORMASI DATA</h5>
+              <div class="data-table mx-auto w-100" style="max-height: 400px; overflow: auto;">
                <div id="data-content">
                   {% if data_preview %}
                      {{ data_preview|safe }}
@@ -196,52 +197,25 @@
           </div>
     
           <!-- Kolom Kanan -->
-          <div class="col-md-4 d-flex flex-column justify-content-between">
+          <!-- <div class="col-md-4 d-flex flex-column justify-content-between"> -->
             <form action="" method="post"> {% csrf_token %}
-               <div class="mb-3">
+               <div class="mb-3" style=" padding-left: 48px; margin-top: -570px;">
                <div class="dropdown-box d-flex justify-content-between align-items-center mb-3">
                   <span>PILIH DATA YANG DIGUNAKAN :</span>
                   <select name="source" id="dataSource" onchange="handleDataSourceChange()" class="select-style" required>
                      <option selected>-- PILIH DATA --</option>
-                     <option value="database" {% if selected_source == "database" %}selected{% endif %}>Data Pelatihan</option>
+                     <option value="pelatihan" {% if selected_source == "pelatihan" %}selected{% endif %}>Data Pelatihan</option>
+                     <option value="prediksi" {% if selected_source == "prediksi" %}selected{% endif %}>Data prediksi</option>
                      <!-- <option value="csv" {% if selected_source == "csv" %}selected{% endif %}>Import CSV</option> -->
                   </select>
                </div>
 
                <input type="file" id="csv-upload" accept=".csv" style="display: none;">
                </div>
-            
-              <div class="dropdown-box d-flex justify-content-between align-items-center" style="margin-top: 0px;">
-                <span>BANYAK DATA DI LATIH (%) :</span>
-                <input type="number" min="1" max="99" step="0.01" class="input-percentage" name="split" style="width: 100px;" value="{{ split_ratio|default:'' }}" required>
-              </div>
-    
-               <div class="box ak-box mb-3" style="margin-top: 120px;">
-                  <div class="text-center mb-2">
-                     <h5>AKURASI PELATIHAN</h5>
-                  </div>
-                  <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
-                     {% if akurasi %}
-                        <div class="fs-3 fw-bold" style="font-size: 24px;">{{ akurasi }}%</div>
-                     {% endif %}
-
-                     {% if error %}
-                        <div style="color: red;">{{ error }}</div>
-                     {% endif %}
-                  </div>
-
-                     <!-- {% if akurasi %}
-                        <div style="margin-top: 50px;">Akurasi Pelatihan: {{ akurasi }}%</div>
-                     {% endif %} -->
-               </div>
-
-               <div>
-                  <button type="submit" class="btn btn-secondary btn-rounded w-100 submit">LATIH DATA</button>
-               </div>
             </form>
 
             
-          </div>
+          <!-- </div> -->
         </div>
       </div>
 
@@ -262,7 +236,7 @@
                const selected = document.getElementById("dataSource").value;
                const dataContent = document.getElementById("data-content");
 
-               if (selected === "database") {
+               if (selected === "pelatihan") {
                   // fetch('/pelatihan/get_data_database/')
                   // .then(response => response.json())
                   // .then(data => {
@@ -274,35 +248,12 @@
                   // });
 
                   loadPage(1);
-               } else if (selected === "csv") {
-                  document.getElementById('csv-upload').click();
-                  document.getElementById('csv-upload').addEventListener('change', function() {
-                  const fileInput = this;
-                  const formData = new FormData();
-                  formData.append('file', fileInput.files[0]);
-
-                  fetch('/pelatihan/upload_csv/', {
-                     method: 'POST',
-                     body: formData,
-                     headers: {
-                           'X-CSRFToken': '{{ csrf_token }}'
-                     }
-                  })
-                  .then(response => response.json())
-                  .then(data => {
-                     if (data.success) {
-                           displayTable(data.columns, data.rows);
-                     } else {
-                           document.getElementById("data-content").innerHTML = "Gagal memuat CSV: " + data.error;
-                     }
-                  });
-               });
+               } else if (selected === "prediksi") {
+                  loadPagePred(1);
                } else {
                   dataContent.innerHTML = "Silakan pilih data yang digunakan";
                }
             }
-
-            
 
             // function displayTable(columns, rows) {
             //    let html = "<table border='1'><tr>";
@@ -340,17 +291,17 @@
                html += "</table>";
 
                // Tambahkan pagination buttons
-               // if (num_pages > 1) {
-               //    html += "<div class='pagination mt-3'>";
-               //    for (let i = 1; i <= num_pages; i++) {
-               //       if (i === current_page) {
-               //          html += `<button disabled>${i}</button> `;
-               //       } else {
-               //          html += `<button onclick="loadPage(${i})">${i}</button> `;
-               //       }
-               //    }
-               //    html += "</div>";
-               // }
+            //    if (num_pages > 1) {
+            //       html += "<div class='pagination mt-3'>";
+            //       for (let i = 1; i <= num_pages; i++) {
+            //          if (i === current_page) {
+            //             html += `<button disabled>${i}</button> `;
+            //          } else {
+            //             html += `<button onclick="loadPage(${i})">${i}</button> `;
+            //          }
+            //       }
+            //       html += "</div>";
+            //    }
 
                if (num_pages > 1) {
                     html += `<nav aria-label="Page navigation">
@@ -398,7 +349,19 @@
             }
 
             function loadPage(page) {
-               fetch(`/pelatihan/get_data_database/?page=${page}`)
+               fetch(`/info_data/get_data_pelatihan/?page=${page}`)
+               .then(response => response.json())
+               .then(data => {
+                  if (data.success) {
+                     displayTable(data.columns, data.rows, data.num_pages, data.current_page);
+                  } else {
+                     document.getElementById("data-content").innerHTML = "Gagal memuat data.";
+                  }
+               });
+            }
+
+            function loadPagePred(page) {
+               fetch(`/info_data/get_data_prediksi/?page=${page}`)
                .then(response => response.json())
                .then(data => {
                   if (data.success) {

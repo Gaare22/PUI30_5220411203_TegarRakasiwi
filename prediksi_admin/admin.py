@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import gaya_belajar
+from .models_adm import gaya_belajar
 
 # Register your models here.
 

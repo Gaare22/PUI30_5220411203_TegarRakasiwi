@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'prediksi',
     'homeadmin',
     'prediksi_admin',
-    'perhitungan'
+    'perhitungan',
+    'info_data'
 ]
 
 MIDDLEWARE = [

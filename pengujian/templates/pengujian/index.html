@@ -79,6 +79,34 @@
         .submit:hover {
          background-color: #f0390f;
          }
+         
+         /* Semua pagination */
+         .pagination .page-link {
+         border-radius: 8px;
+         margin: 0 3px;
+         }
+
+         /* Halaman tidak aktif */
+         .pagination .page-item:not(.active) .page-link {
+         color: black;             /* teks hitam */
+         border: 1px solid #CAD3D6;    /* border merah */
+         }
+
+         /* Hover di halaman tidak aktif */
+         .pagination .page-item:not(.active) .page-link:hover {
+         background-color: #f0390f; /* orange */
+         color: white;
+         border-color: #f0390f;
+         }
+
+         /* Halaman aktif */
+         .pagination .active .page-link {
+         background-color: #f0390f; /* orange */
+         border-color: #f0390f;
+         color: white;
+         }
+
+
 
       </style>
    </head>
@@ -97,15 +125,19 @@
                      </div>
                   </div>
                </div>
-               <div class="col-md-8 col-sm-12">
+               <div class="col-md-10 col-sm-12">
                   <nav class="navigation navbar navbar-expand-md navbar-dark ">
-                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                     <span class="navbar-toggler-icon"></span>
+                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04"
+                        aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                      </button>
                      <div class="collapse navbar-collapse" id="navbarsExample04">
                         <ul class="navbar-nav mr-auto">
                            <li class="nav-item">
                               <a class="nav-link" href="/homeadmin/">Home</a>
+                           </li>
+                           <li class="nav-item">
+                              <a class="nav-link" href="/info_data/">Data</a>
                            </li>
                            <li class="nav-item">
                               <a class="nav-link" href="/input_data/">Input Data</a>
@@ -120,17 +152,9 @@
                               <a class="nav-link" href="/prediksi_admin/">Prediksi</a>
                            </li>
                         </ul>
-                     </div>
-                  </nav>
-               </div>
 
-               <div class=" col-md-2 col-sm-3 col logo_section" style="margin-left: 1000px; margin-top: -50px;">
-                  <nav class="navigation navbar navbar-expand-md navbar-dark ">
-                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                     <span class="navbar-toggler-icon"></span>
-                     </button>
-                     <div class="collapse navbar-collapse" id="navbarsExample04">
-                        <ul class="navbar-nav mr-auto">
+                        <!-- Logout otomatis ke kanan -->
+                        <ul class="navbar-nav ml-auto">
                            <li class="nav-item">
                               <a class="nav-link" href="/">Logout</a>
                            </li>
@@ -157,11 +181,76 @@
               <h5 class="mb-4">DATA YANG AKAN DIUJI</h5>
               <div class="data-table mx-auto w-100" style="max-height: 380px; overflow: auto;">
                <div id="data-content">
-                  {% if data_preview %}
-                     {{ data_preview|safe }}
-                  {% else %}
-                     Silakan pilih sumber data.
-                  {% endif %}
+                  {% if page_obj %}
+                     <table class="table table-bordered">
+                        <thead>
+                           <tr>
+                           {% for col in columns %}
+                              <th>{{ col }}</th>
+                           {% endfor %}
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {% for row in page_obj %}
+                           <tr>
+                              {% for value in row %}
+                                 <td>{{ value }}</td>
+                              {% endfor %}
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+
+                     <!-- Pagination controls -->
+                     <!-- <nav>
+                        <ul class="pagination justify-content-center">
+                           {% if page_obj.has_previous %}
+                              <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&aksi={{ aksi }}">Previous</a></li>
+                           {% endif %}
+
+                           {% for num in page_obj.paginator.page_range %}
+                              {% if page_obj.number == num %}
+                              <li class="page-item active"><a class="page-link" href="?page={{ num }}&aksi={{ aksi }}">{{ num }}</a></li>
+                              {% else %}
+                              <li class="page-item"><a class="page-link" href="?page={{ num }}&aksi={{ aksi }}">{{ num }}</a></li>
+                              {% endif %}
+                           {% endfor %}
+
+                           {% if page_obj.has_next %}
+                              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&aksi={{ aksi }}">Next</a></li>
+                           {% endif %}
+                        </ul>
+                     </nav> -->
+                     <nav>
+                        <ul class="pagination justify-content-center">
+                           <!-- Always show Previous -->
+                           <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                              <a class="page-link" href="?page={% if page_obj.has_previous %}{{ page_obj.previous_page_number }}{% else %}1{% endif %}&aksi={{ aksi }}">Previous</a>
+                           </li>
+
+                           {% for num in page_obj.paginator.page_range %}
+                              {% if page_obj.number == num %}
+                              <li class="page-item active">
+                                 <a class="page-link" href="?page={{ num }}&aksi={{ aksi }}">{{ num }}</a>
+                              </li>
+                              {% else %}
+                              <li class="page-item">
+                                 <a class="page-link" href="?page={{ num }}&aksi={{ aksi }}">{{ num }}</a>
+                              </li>
+                              {% endif %}
+                           {% endfor %}
+
+                           <!-- Always show Next -->
+                           <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                              <a class="page-link" href="?page={% if page_obj.has_next %}{{ page_obj.next_page_number }}{% else %}{{ page_obj.paginator.num_pages }}{% endif %}&aksi={{ aksi }}">Next</a>
+                           </li>
+                        </ul>
+                     </nav>
+
+
+                     {% else %}
+                        Silakan pilih sumber data.
+                     {% endif %}
                </div>
               </div>
             </div>
@@ -172,7 +261,7 @@
             <form method="POST" enctype="multipart/form-data" id="ujiForm"> {% csrf_token %}
                <div class="mb-3">
                   <div class="dropdown-box d-flex justify-content-between align-items-center mb-3">
-                  <input type="hidden" name="aksi" id="aksi" value="preview">  <!-- penanda aksi -->
+                  <input type="hidden" name="aksi" id="aksi" value="{{ aksi|default:'preview' }}">  <!-- penanda aksi -->
                   <span>PILIH DATA YANG DIGUNAKAN :</span>
                   <select name="sumber_data" class="select-style" id="sumber_data" onchange="handleSourceChange(this)" required>
                      <option value="">-- Pilih Data --</option>
