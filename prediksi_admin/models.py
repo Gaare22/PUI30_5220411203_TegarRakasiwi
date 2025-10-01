@@ -1,6 +1,6 @@
 from django.db import models
 # Import langsung model dari app prediksi (supaya tidak duplikat)
-from prediksi.models import InputData, gaya_belajar, PrediksiGayaBelajar
+from prediksi.models import InputData, GayaBelajar, PrediksiGayaBelajar
 
 
 # Jika memang butuh model khusus untuk admin (contoh hanya untuk akses),
@@ -12,7 +12,7 @@ class InputDataAdmin(InputData):
         verbose_name_plural = "Data Pelatihan (Admin)"
 
 
-class GayaBelajarAdmin(gaya_belajar):
+class GayaBelajarAdmin(GayaBelajar):
     class Meta:
         proxy = True
         verbose_name = "Gaya Belajar (Admin)"

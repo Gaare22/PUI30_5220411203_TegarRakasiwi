@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'homeadmin',
     'prediksi_admin',
     'perhitungan',
-    'info_data'
+    'info_data',
+    'admin_login',
 ]
 
 MIDDLEWARE = [
@@ -57,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'homeadmin.admin_redirect.AdminLoginRedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'myweb.urls'
@@ -146,7 +146,7 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOGIN_URL = '/admin/login/'
+LOGIN_URL = '/admin_login/'
 
 SESSION_COOKIE_AGE = 120  # waktu 120 detik / 2 menit
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True

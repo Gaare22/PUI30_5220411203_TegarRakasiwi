@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import gaya_belajar
+from .models import GayaBelajar
 
 # Register your models here.
 
-admin.site.register(gaya_belajar)
+admin.site.register(GayaBelajar)

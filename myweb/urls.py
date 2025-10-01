@@ -32,6 +32,7 @@ urlpatterns = [
     path('prediksi_admin/', include('prediksi_admin.urls')),
     path('perhitungan/', include('perhitungan.urls')),
     path('info_data/', include('info_data.urls')),
+    path('admin_login/', include('admin_login.urls')),
 ]
 
 if settings.DEBUG:

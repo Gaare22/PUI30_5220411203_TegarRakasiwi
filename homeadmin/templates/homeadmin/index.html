@@ -26,6 +26,8 @@
       <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+
+     
    </head>
    <!-- body -->
    <body class="main-layout">
@@ -91,117 +93,70 @@
             <div class="container-fluid">
                <div class="row">
                   <div class="col-md-12">
-                     <!-- carousel code -->
-                     <div id="carouselExampleIndicators" class="carousel slide">
-                        <ol class="carousel-indicators">
-                           <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                           <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                           <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                        </ol>
-                        <div class="carousel-inner">
-                           <!-- first slide -->
-                           <div class="carousel-item active">
-                              <div class="carousel-caption relative">
-                                 <div class="row d_flex">
-                                    <div  class="col-md-5">
-                                       <div class="board">
-                                          <i><img src="{% static 'img/top_icon.png'%}" alt="#"/></i>
-                                          <h3>
-                                             GAYA<br> BELAJAR<br>
-                                          </h3>
-                                          <div class="link_btn">
-                                             <a class="read_more" href="{% static 'Javascript:void(0)' %}">TR Learn   <span></span></a>
-                                          </div>
-                                       </div>
-                                    </div>
-                                    <div class="col-md-7">
-                                       <div style="text-align: center;" class="banner_img">
-                                          <figure><img style="width: 60%; margin-top: 55px;" class="img_responsive" src="{% static 'img/VAK1.png' %}"></figure>
-                                       </div>
-                                    </div>
-                                 </div>
+                     
+                     <div class="container mt-5">
+                        <h2 class="text-center mb-4">Dashboard Data</h2>
+                        <!-- Pelatihan -->
+                        <div class="row text-center">
+                           <!-- Grafik Batang -->
+                           <div class="col-md-4 d-flex flex-column align-items-center">
+                              <h5>Distribusi Jenis Kelamin Data Pelatihan</h5>
+                              <hr style="width: 100%;">
+                              <div class="d-flex justify-content-center align-items-center">
+                                 <canvas style="width: 180px; height: 180px;" id="genderChart"></canvas>
                               </div>
                            </div>
-                           <!-- second slide -->
-                           <div class="carousel-item">
-                            <div class="carousel-caption relative">
-                                <div class="row d_flex">
-                                   <div  class="col-md-5">
-                                      <div class="board">
-                                         <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i>
-                                         <h3>
-                                            GAYA<br> BELAJAR<br> VISUAL
-                                         </h3>
-                                         <div class="link_btn">
-                                            <a class="read_more" href="{% static 'Javascript:void(0)' %}">TR Learn   <span></span></a>
-                                         </div>
-                                      </div>
-                                   </div>
-                                   <div class="col-md-7">
-                                      <div class="banner_img">
-                                         <figure><img style="width: 100%; margin-top: 40px;" class="img_responsive" src="{% static 'img/Visual.png' %}"></figure>
-                                      </div>
-                                   </div>
-                                </div>
-                             </div>
+
+                           <!-- Grafik Pie -->
+                           <div class="col-md-4 d-flex flex-column align-items-center">
+                              <h5>Distribusi Gaya Belajar Data Pelatihan</h5>
+                              <hr style="width: 100%;">
+                              <div class="d-flex justify-content-center align-items-center">
+                                 <canvas style="width: 180px; height: 180px;" id="gayaChart"></canvas>
+                              </div>
                            </div>
-                           <!-- third slide-->
-                           <div class="carousel-item">
-                            <div class="carousel-caption relative">
-                                <div class="row d_flex">
-                                   <div  class="col-md-5">
-                                      <div class="board">
-                                         <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i>
-                                         <h3>
-                                            GAYA<br> BELAJAR<br> AUDITORI
-                                         </h3>
-                                         <div class="link_btn">
-                                            <a class="read_more" href="Javascript:void(0)">TR Learn   <span></span></a>
-                                         </div>
-                                      </div>
-                                   </div>
-                                   <div class="col-md-7">
-                                      <div class="banner_img">
-                                         <figure><img style="width: 100%; margin-top: 50px;" class="img_responsive" src="{% static 'img/Auditori.png' %}"></figure>
-                                      </div>
-                                   </div>
-                                </div>
-                             </div>
+
+                           <!-- Grafik Jurusan -->
+                           <div class="col-md-4 d-flex flex-column align-items-center">
+                              <h5>Distribusi Jurusan Data Pelatihan</h5>
+                              <hr style="width: 100%;">
+                              <div class="d-flex justify-content-center align-items-center">
+                                 <canvas style="width: 180px; height: 180px;" id="jurusanChart"></canvas>
+                              </div>
                            </div>
-                           <!-- forth slide -->
-                            <div class="carousel-item">
-                                <div class="carousel-caption relative">
-                                    <div class="row d_flex">
-                                       <div  class="col-md-5">
-                                          <div class="board">
-                                             <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i>
-                                             <h3>
-                                                GAYA<br> BELAJAR<br> KINESTETIK
-                                             </h3>
-                                             <div class="link_btn">
-                                                <a class="read_more" href="{% static 'Javascript:void(0)' %}">TR Learn   <span></span></a>
-                                             </div>
-                                          </div>
-                                       </div>
-                                       <div class="col-md-7">
-                                          <div class="banner_img">
-                                             <figure><img style="width: 100%; margin-top: 50px;" class="img_responsive" src="{% static 'img/Kinestetik.png' %}"></figure>
-                                          </div>
-                                       </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                        <!-- controls -->
-                        <a class="carousel-control-prev" style="margin-top: 20px;" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-                        <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" style="margin-top: 20px;" href="#carouselExampleIndicators" role="button" data-slide="next">
-                        <i class="fa fa-arrow-right" aria-hidden="true"></i>
-                        <span class="sr-only">Next</span>
-                        </a>
+
+                        <!-- Prediksi -->
+                        <div class="row text-center mt-5">
+                           <!-- Grafik Batang -->
+                           <div class="col-md-4 d-flex flex-column align-items-center">
+                              <h5>Distribusi Jenis Kelamin Data Prediksi</h5>
+                              <hr style="width: 100%;">
+                              <div class="d-flex justify-content-center align-items-center">
+                                 <canvas style="width: 180px; height: 180px;" id="genderChart2"></canvas>
+                              </div>
+                           </div>
+
+                           <!-- Grafik Pie -->
+                           <div class="col-md-4 d-flex flex-column align-items-center">
+                              <h5>Distribusi Gaya Belajar Data Prediksi</h5>
+                              <hr style="width: 100%;">
+                              <div class="d-flex justify-content-center align-items-center">
+                                 <canvas style="width: 180px; height: 180px;" id="gayaChart2"></canvas>
+                              </div>
+                           </div>
+
+                           <!-- Grafik Jurusan -->
+                           <div class="col-md-4 d-flex flex-column align-items-center">
+                              <h5>Distribusi Jurusan Data Prediksi</h5>
+                              <hr style="width: 100%;">
+                              <div class="d-flex justify-content-center align-items-center">
+                                 <canvas style="width: 180px; height: 180px;" id="jurusanChart2"></canvas>
+                              </div>
+                           </div>
+                        </div>
                      </div>
+
                   </div>
                </div>
             </div>
@@ -209,20 +164,6 @@
       </div>
       <!-- end banner -->
       
-      <!--  footer -->
-      <footer>
-         <div class="footer">
-            <div class="copyright">
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-12">
-                        <p>© 2020 All Rights Reserved. Design by <a href="https://html.design/"> Free html Templates</a></p>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </footer>
       <!-- end footer -->
       <!-- Javascript files-->
       <script src="{% static 'js/jquery.min.js' %}"></script>
@@ -230,12 +171,173 @@
       <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
       <!-- sidebar -->
       <script src="{% static 'js/custom.js' %}"></script>
-      <script>
-         AOS.init();
 
-      //    setTimeout(function() {
-      //       window.location.href = "/admin";
-      //   }, 10000);
+      {{ gender_labels_pel|json_script:"gender-labels-pel" }}
+      {{ gender_data_pel|json_script:"gender-data-pel" }}
+      {{ gaya_labels_pel|json_script:"gaya-labels-pel" }}
+      {{ gaya_data_pel|json_script:"gaya-data-pel" }}
+      {{ jurusan_labels_pel|json_script:"jurusan-labels-pel" }}
+      {{ jurusan_data_pel|json_script:"jurusan-data-pel" }}
+      {{ gender_labels_pred|json_script:"gender-labels-pred" }}
+      {{ gender_data_pred|json_script:"gender-data-pred" }}
+      {{ gaya_labels_pred|json_script:"gaya-labels-pred" }}
+      {{ gaya_data_pred|json_script:"gaya-data-pred" }}
+      {{ jurusan_labels_pred|json_script:"jurusan-labels-pred" }}
+      {{ jurusan_data_pred|json_script:"jurusan-data-pred" }}
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script>
+         // Ambil data dari Django (JSON valid)
+         const genderLabelsPel = JSON.parse(document.getElementById('gender-labels-pel').textContent);
+         const genderDataPel   = JSON.parse(document.getElementById('gender-data-pel').textContent);
+         const gayaLabelsPel   = JSON.parse(document.getElementById('gaya-labels-pel').textContent);
+         const gayaDataPel     = JSON.parse(document.getElementById('gaya-data-pel').textContent);
+         const jurusanLabelsPel = JSON.parse(document.getElementById('jurusan-labels-pel').textContent);
+         const jurusanDataPel   = JSON.parse(document.getElementById('jurusan-data-pel').textContent);
+         const genderLabelsPred = JSON.parse(document.getElementById('gender-labels-pred').textContent);
+         const genderDataPred   = JSON.parse(document.getElementById('gender-data-pred').textContent);
+         const gayaLabelsPred   = JSON.parse(document.getElementById('gaya-labels-pred').textContent);
+         const gayaDataPred     = JSON.parse(document.getElementById('gaya-data-pred').textContent);
+         const jurusanLabelsPred = JSON.parse(document.getElementById('jurusan-labels-pred').textContent);
+         const jurusanDataPred   = JSON.parse(document.getElementById('jurusan-data-pred').textContent);
+
+         //Pelatihan Charts
+         // Bar chart - Gender
+         new Chart(document.getElementById('genderChart'), {
+            type: 'bar',
+            data: {
+               labels: genderLabelsPel,
+               datasets: [{
+                     label: 'Jumlah',
+                     data: genderDataPel,
+                     backgroundColor: ['#36A2EB','#FF6384'],
+                     borderWidth: 1
+               }]
+            },
+            options: {
+               responsive: true,
+               plugins: {
+                     legend: { display: false } // sembunyikan penunjuk warna
+               },
+               scales: { y: { beginAtZero: true } }
+            }
+         });
+
+         // Pie chart - Gaya Belajar
+         new Chart(document.getElementById('gayaChart'), {
+            type: 'pie',
+            data: {
+               labels: gayaLabelsPel,
+               datasets: [{
+                     data: gayaDataPel,
+                     backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF'],
+               }]
+            },
+            options: {
+               responsive: true,
+               plugins: {
+                  legend: {
+                     display: true,
+                     position: 'top',
+                     labels: {
+                        boxWidth: 15,     // kecilkan kotak warna
+                        padding: 10
+                     }
+                  }
+               }
+            }
+         });
+
+         // Jurusan (Pie - warna random, legend hidden)
+         const randomColors = jurusanLabelsPel.map(() =>
+            `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
+         );
+
+         new Chart(document.getElementById('jurusanChart'), {
+            type: 'pie',
+            data: {
+               labels: jurusanLabelsPel,
+               datasets: [{
+                     data: jurusanDataPel,
+                     backgroundColor: randomColors,
+               }]
+            },
+            options: {
+               responsive: true,             
+               plugins: {
+                     legend: { display: false } // sembunyikan penunjuk warna
+               }
+            }
+         });
+
+         //Prediksi Charts
+         // Bar chart - Gender
+         new Chart(document.getElementById('genderChart2'), {
+            type: 'bar',
+            data: {
+               labels: genderLabelsPred,
+               datasets: [{
+                     label: 'Jumlah',
+                     data: genderDataPred,
+                     backgroundColor: ['#36A2EB','#FF6384'],
+                     borderWidth: 1
+               }]
+            },
+            options: {
+               responsive: true,
+               plugins: {
+                     legend: { display: false } // sembunyikan penunjuk warna
+               },
+               scales: { y: { beginAtZero: true } }
+            }
+         });
+
+         // Pie chart - Gaya Belajar
+         new Chart(document.getElementById('gayaChart2'), {
+            type: 'pie',
+            data: {
+               labels: gayaLabelsPred,
+               datasets: [{
+                     data: gayaDataPred,
+                     backgroundColor: ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF'],
+               }]
+            },
+            options: {
+               responsive: true,
+               plugins: {
+                  legend: {
+                     display: true,
+                     position: 'top',
+                     labels: {
+                        boxWidth: 15,     // kecilkan kotak warna
+                        padding: 10
+                     }
+                  }
+               }
+            }
+         });
+
+         // Jurusan (Pie - warna random, legend hidden)
+         const randomColors2 = jurusanLabelsPred.map(() =>
+            `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
+         );
+
+         new Chart(document.getElementById('jurusanChart2'), {
+            type: 'pie',
+            data: {
+               labels: jurusanLabelsPred,
+               datasets: [{
+                     data: jurusanDataPred,
+                     backgroundColor: randomColors2,
+               }]
+            },
+            options: {
+               responsive: true,             
+               plugins: {
+                     legend: { display: false } // sembunyikan penunjuk warna
+               }
+            }
+         });
       </script>
    </body>
 </html>

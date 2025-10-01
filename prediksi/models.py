@@ -29,7 +29,7 @@ class InputData(models.Model):
     def __str__(self):
         return self.nama
     
-class gaya_belajar(models.Model):
+class GayaBelajar(models.Model):
     id_gaya_belajar = models.IntegerField(primary_key=True)
     nama_target = models.CharField(max_length=100)
     gambar = models.ImageField(upload_to='gambar_gaya_belajar/')
@@ -64,8 +64,7 @@ class PrediksiGayaBelajar(models.Model):
     P13 = models.IntegerField()
     P14 = models.IntegerField()
     P15 = models.IntegerField()
-    id_gaya_belajar = models.IntegerField()
-    id_gaya_belajar = models.ForeignKey(gaya_belajar, on_delete=models.CASCADE, db_column='id_gaya_belajar')
+    id_gaya_belajar = models.ForeignKey(GayaBelajar, on_delete=models.CASCADE, db_column='id_gaya_belajar')
 
     class Meta:
         managed = False  # Jangan biarkan Django mengelola/membuat ulang tabel ini

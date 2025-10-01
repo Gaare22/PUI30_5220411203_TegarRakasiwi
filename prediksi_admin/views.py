@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models_adm import InputData, PrediksiGayaBelajar, gaya_belajar
+from .models import GayaBelajarAdmin, PrediksiGayaBelajar
 from django.conf import settings
 from django.contrib import messages
 import pandas as pd
@@ -142,13 +142,13 @@ def prediksi_view(request):
         hasil = model.predict(input_df)[0]
 
         if hasil == "Auditori":
-            hsl = gaya_belajar.objects.get(id_gaya_belajar=1)
+            hsl = GayaBelajarAdmin.objects.get(id_gaya_belajar=1)
 
         elif hasil == "Kinestetik":
-            hsl = gaya_belajar.objects.get(id_gaya_belajar=2)
+            hsl = GayaBelajarAdmin.objects.get(id_gaya_belajar=2)
 
         elif hasil == "Visual":
-            hsl = gaya_belajar.objects.get(id_gaya_belajar=3)
+            hsl = GayaBelajarAdmin.objects.get(id_gaya_belajar=3)
 
         # Simpan hasil prediksi
         prediksi = PrediksiGayaBelajar(
