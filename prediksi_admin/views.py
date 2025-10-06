@@ -5,7 +5,8 @@ from django.contrib import messages
 import pandas as pd
 import os
 import joblib
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
 import re
 
 #lokasi model
@@ -13,8 +14,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path_model = os.path.join(settings.BASE_DIR, 'tmp', 'model.pkl')
 path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
 
-@login_required
 def prediksi_view(request):
+    # cek session admin
+    if "admin_id" not in request.session:
+        return redirect("login")  # balik ke halaman login
+
     if request.method == 'POST':
         if not os.path.exists(path_model):
             messages.error(request, "Model Belum dibuat")

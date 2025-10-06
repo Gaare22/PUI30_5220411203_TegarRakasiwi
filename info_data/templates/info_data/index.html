@@ -9,7 +9,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Home</title>
+      <title>TRLearn</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -20,7 +20,7 @@
       <!-- Responsive-->
       <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
       <!-- fevicon -->
-      <link rel="icon" href="{% static 'img/fevicon.png' %}" type="image/gif" />
+      <link rel="icon" href="{% static 'img/gabel_logo1.png' %}" type="image/gif" />
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <!--[if lt IE 9]>
@@ -109,6 +109,15 @@
         color: white;
         border-color: #f0390f;
         }
+        /* Pastikan navbar tidak wrap ke 2 baris */
+         .navbar-nav {
+            flex-wrap: nowrap;
+         }
+
+         .navbar-nav .nav-item .nav-link {
+            white-space: nowrap; /* cegah teks jadi 2 baris */
+         }
+
 
       </style>
    </head>
@@ -135,9 +144,10 @@
                         <span class="navbar-toggler-icon"></span>
                      </button>
                      <div class="collapse navbar-collapse" id="navbarsExample04">
+                        <!-- Menu kiri -->
                         <ul class="navbar-nav mr-auto">
                            <li class="nav-item">
-                              <a class="nav-link" href="/homeadmin/">Home</a>
+                              <a class="nav-link" href="/homeadmin/">Dashboard</a>
                            </li>
                            <li class="nav-item active">
                               <a class="nav-link" href="/info_data/">Data</a>
@@ -155,8 +165,7 @@
                               <a class="nav-link" href="/prediksi_admin/">Prediksi</a>
                            </li>
                         </ul>
-
-                        <!-- Logout otomatis ke kanan -->
+                        <!-- Logout di kanan -->
                         <ul class="navbar-nav ml-auto">
                            <li class="nav-item">
                               <a class="nav-link" href="/">Logout</a>
@@ -230,23 +239,11 @@
         <!-- sidebar -->
         <script src="{% static 'js/custom.js' %}"></script>
         <script>
-            AOS.init();
-
             function handleDataSourceChange() {
                const selected = document.getElementById("dataSource").value;
                const dataContent = document.getElementById("data-content");
 
                if (selected === "pelatihan") {
-                  // fetch('/pelatihan/get_data_database/')
-                  // .then(response => response.json())
-                  // .then(data => {
-                  //       if (data.success) {
-                  //          displayTable(data.columns, data.rows);
-                  //       } else {
-                  //          dataContent.innerHTML = "Gagal memuat data.";
-                  //       }
-                  // });
-
                   loadPage(1);
                } else if (selected === "prediksi") {
                   loadPagePred(1);
@@ -254,25 +251,6 @@
                   dataContent.innerHTML = "Silakan pilih data yang digunakan";
                }
             }
-
-            // function displayTable(columns, rows) {
-            //    let html = "<table border='1'><tr>";
-            //    columns.forEach(col => {
-            //       html += `<th>${col}</th>`;
-            //    });
-            //    html += "</tr>";
-
-            //    rows.forEach(row => {
-            //       html += "<tr>";
-            //       row.forEach(cell => {
-            //             html += `<td>${cell}</td>`;
-            //       });
-            //       html += "</tr>";
-            //    });
-            //    html += "</table>";
-
-            //    document.getElementById("data-content").innerHTML = html;
-            // }
 
             function displayTable(columns, rows, num_pages = 1, current_page = 1) {
                let html = "<table border='1'><tr>";
@@ -289,19 +267,6 @@
                   html += "</tr>";
                });
                html += "</table>";
-
-               // Tambahkan pagination buttons
-            //    if (num_pages > 1) {
-            //       html += "<div class='pagination mt-3'>";
-            //       for (let i = 1; i <= num_pages; i++) {
-            //          if (i === current_page) {
-            //             html += `<button disabled>${i}</button> `;
-            //          } else {
-            //             html += `<button onclick="loadPage(${i})">${i}</button> `;
-            //          }
-            //       }
-            //       html += "</div>";
-            //    }
 
                if (num_pages > 1) {
                     html += `<nav aria-label="Page navigation">
@@ -348,6 +313,67 @@
                document.getElementById("data-content").innerHTML = html;
             }
 
+            function displayTablePred(columns, rows, num_pages = 1, current_page = 1) {
+               let html = "<table border='1'><tr>";
+               columns.forEach(col => {
+                  html += `<th>${col}</th>`;
+               });
+               html += "</tr>";
+
+               rows.forEach(row => {
+                  html += "<tr>";
+                  row.forEach(cell => {
+                     html += `<td>${cell}</td>`;
+                  });
+                  html += "</tr>";
+               });
+               html += "</table>";
+
+               if (num_pages > 1) {
+                    html += `<nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center">`;
+
+                    // Tombol Previous
+                    if (current_page > 1) {
+                        html += `<li class="page-item">
+                                    <a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${current_page - 1})">Previous</a>
+                                </li>`;
+                    } else {
+                        html += `<li class="page-item disabled">
+                                    <span class="page-link">Previous</span>
+                                </li>`;
+                    }
+
+                    // Nomor halaman
+                    for (let i = 1; i <= num_pages; i++) {
+                        if (i === current_page) {
+                            html += `<li class="page-item active">
+                                        <span class="page-link" style="background-color:#f0390f; border-color:#f0390f;">${i}</span>
+                                    </li>`;
+                        } else {
+                            html += `<li class="page-item">
+                                        <a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${i})">${i}</a>
+                                    </li>`;
+                        }
+                    }
+
+                    // Tombol Next
+                    if (current_page < num_pages) {
+                        html += `<li class="page-item">
+                                    <a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${current_page + 1})">Next</a>
+                                </li>`;
+                    } else {
+                        html += `<li class="page-item disabled">
+                                    <span class="page-link">Next</span>
+                                </li>`;
+                    }
+
+                    html += `</ul></nav>`;
+                    }
+
+               document.getElementById("data-content").innerHTML = html;
+            }
+
             function loadPage(page) {
                fetch(`/info_data/get_data_pelatihan/?page=${page}`)
                .then(response => response.json())
@@ -365,7 +391,7 @@
                .then(response => response.json())
                .then(data => {
                   if (data.success) {
-                     displayTable(data.columns, data.rows, data.num_pages, data.current_page);
+                     displayTablePred(data.columns, data.rows, data.num_pages, data.current_page);
                   } else {
                      document.getElementById("data-content").innerHTML = "Gagal memuat data.";
                   }

@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.contrib.auth import logout
 from django.shortcuts import redirect
@@ -6,9 +5,7 @@ import json
 from .models import DataPelatihanDash, PrediksiGayaBelajarDash
 from django.db.models import Count
 
-@login_required
 def dashboard(request):
-
     # cek session admin
     if "admin_id" not in request.session:
         return redirect("login")  # balik ke halaman login

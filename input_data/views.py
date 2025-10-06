@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import InputDataForm
 from django.contrib import messages
@@ -7,8 +6,11 @@ import csv
 from .models import InputData
 
 # Create your views here.
-@login_required
 def index(request):
+    # cek session admin
+    if "admin_id" not in request.session:
+        return redirect("login")  # balik ke halaman login
+
     if request.method == 'POST':
         form = InputDataForm(request.POST)
         if form.is_valid():

@@ -6,9 +6,13 @@ from .models import DataPelatihanInfo, PrediksiGayaBelajarInfo
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
-@login_required
 def index(request):
+    # cek session admin
+    if "admin_id" not in request.session:
+        return redirect("login")  # balik ke halaman login
+
     return render(request, 'info_data/index.html')
 
 def get_data_pelatihan(request):
@@ -44,9 +48,6 @@ def get_data_prediksi(request):
     data_queryset = PrediksiGayaBelajarInfo.objects.all().values()
     if not data_queryset:
         return JsonResponse({'success': False})
-    
-    # columns = list(data_queryset[0].keys())
-    # rows = [list(item.values()) for item in data_queryset]
 
     # Ambil parameter halaman dari query string (?page=2)
     page_number = request.GET.get("page", 1)
@@ -56,6 +57,10 @@ def get_data_prediksi(request):
 
     columns = list(data_queryset[0].keys())
     rows = [list(item.values()) for item in page_obj.object_list]
+
+    print("Total queryset:", data_queryset.count())
+    print("Page size:", len(page_obj.object_list))
+    print("Current page:", page_obj.number, "/", paginator.num_pages)
 
     if "id_gaya_belajar_id" in columns:
         idx = columns.index("id_gaya_belajar_id")

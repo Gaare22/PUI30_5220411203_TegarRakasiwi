@@ -9,7 +9,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Home</title>
+      <title>TRLearn</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -20,7 +20,7 @@
       <!-- Responsive-->
       <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
       <!-- fevicon -->
-      <link rel="icon" href="{% static 'img/fevicon.png' %}" type="image/gif" />
+      <link rel="icon" href="{% static 'img/gabel_logo1.png' %}" type="image/gif" />
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <!--[if lt IE 9]>
@@ -120,6 +120,21 @@
         input[type="file"] {
         display: none;
         }
+
+        .navbar-nav {
+        flex-wrap: nowrap;
+        }
+
+        .navbar-nav .nav-item .nav-link {
+        white-space: nowrap; /* cegah teks jadi 2 baris */
+        }
+
+        .single-data.active {
+            background-color: #f0390f;
+            color: white;
+        }
+
+        
       </style>
    </head>
    <!-- body -->
@@ -154,7 +169,7 @@
                      <div class="collapse navbar-collapse" id="navbarsExample04">
                         <ul class="navbar-nav mr-auto">
                            <li class="nav-item">
-                              <a class="nav-link" href="/homeadmin/">Home</a>
+                              <a class="nav-link" href="/homeadmin/">Dashboard</a>
                            </li>
                            <li class="nav-item">
                               <a class="nav-link" href="/info_data/">Data</a>
@@ -473,6 +488,8 @@
          function showForm(option) {
             if (option === 'Single-Data') {
                 document.getElementById("formA").style.display = "block";
+
+                document.querySelector(".single-data").classList.add("active");
             } else {
                 document.getElementById("formA").style.display = "none";
                 alert("Form B belum tersedia.");

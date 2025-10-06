@@ -1,0 +1,50 @@
+h2 {
+    text-align: center;
+    margin-top: 30px;
+}
+table {
+    width: 40%;
+    margin-left: 25px;
+    border-collapse: collapse;
+}
+td, th {
+    padding: 5px 9px;
+    border: 1px solid #ccc;
+}
+th {
+    text-align: left;
+    background-color: #f2f2f2;
+}
+.highlight {
+    font-weight: bold;
+    color: darkblue;
+    font-size: 1.1em;
+}
+.foto{
+    margin-left: 550px;
+    margin-top: -1740px;
+    width: 700px;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.form-group label {
+    width: 40%;
+    font-weight: bold;
+}
+.form-group input{
+    width: 60%;
+    padding: 5px;
+}
+.form-group select {
+    width: 63%;
+    padding: 5px;
+}

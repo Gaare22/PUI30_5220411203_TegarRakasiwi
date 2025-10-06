@@ -11,12 +11,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.naive_bayes import CategoricalNB, GaussianNB
-from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.shortcuts import redirect
+
 
 # Create your views here.
-@login_required
 def index(request):
+    # cek session admin
+    if "admin_id" not in request.session:
+        return redirect("login")  # balik ke halaman login
+
     akurasi = None
     error = None
     source = None
