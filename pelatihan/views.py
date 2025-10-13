@@ -4,6 +4,7 @@ import chardet
 import io
 import pandas as pd
 import numpy as np
+from .nb_logic import generate_likelihood_table_from_df
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import DataPelatihan
@@ -13,6 +14,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.naive_bayes import CategoricalNB, GaussianNB
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
+
 
 
 # Create your views here.
@@ -27,6 +29,7 @@ def index(request):
     split_ratio = None
     data_preview = None
     int_split_input = None
+    prob_info = None
 
     if request.method == "POST":
         split_input = float(request.POST.get("split", 80)) 
@@ -101,6 +104,10 @@ def index(request):
             "Perempuan": 1,
         }
 
+        # bikin reverse mapping: angka → label
+        jurusan_decode = {v: k for k, v in jurusan_map.items()}
+        jenis_kelamin_decode = {v: k for k, v in jenis_kelamin_map.items()}
+
         data["jurusan"] = data["jurusan"].map(jurusan_map)
         data["jenis_kelamin"] = data["jenis_kelamin"].map(jenis_kelamin_map)
         data.dropna(inplace=True)
@@ -153,16 +160,38 @@ def index(request):
         # joblib.dump(model, 'tmp/model.pkl')
         joblib.dump(model, path_model)
         joblib.dump(split_data, "tmp/split_data.pkl")
-        
-        # print("Kelas jurusan:", encoders['jurusan'].classes_)
-        # print("Jumlah kelas jurusan:", len(encoders['jurusan'].classes_))  # Harusnya 23
+
+        train_df = X_train.copy()
+        train_df['real_target'] = y_train.values
+
+        prior_prob, total_per_kelas, total_data, jenis_kelamin_rows, jurusan_rows, pertanyaan_rows = generate_likelihood_table_from_df(
+            train_df,
+            jurusan_decode=jurusan_decode,
+            jenis_kelamin_decode=jenis_kelamin_decode
+        )
+                
+        prob_info = {
+            "prior_prob": prior_prob,
+            "total_per_Real_Target": total_per_kelas,
+            "total_data": total_data,
+            "jenis_kelamin": jenis_kelamin_rows,
+            "jurusan": jurusan_rows,
+            "pertanyaan": pertanyaan_rows,
+            "kelas_stats": [
+                {"kelas": k, "jumlah": total_per_kelas[k], "prior": prior_prob[k]}
+                for k in total_per_kelas
+            ]
+        }
+
 
     return render(request, "pelatihan/index.html", {
         "akurasi": akurasi,
         "error": error,
         "selected_source": source,
         "split_ratio": int_split_input,
-        "data_preview": data_preview,})
+        "data_preview": data_preview,
+        "prob_info": prob_info,
+        })
 
 def get_data_database(request):
     print(">> get_data_database dipanggil")  # Debug

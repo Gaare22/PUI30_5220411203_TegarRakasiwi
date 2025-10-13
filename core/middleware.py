@@ -12,6 +12,8 @@ class AdminLoginRequiredMiddleware:
             "/",              # halaman root
             "/prediksi/",     # halaman prediksi publik
             "/media/",
+            "/admin/",
+            "/perhitungan/"
         ]
 
         # Kalau request path ada di allowed → lewati

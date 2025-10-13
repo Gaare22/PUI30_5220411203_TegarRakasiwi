@@ -215,8 +215,16 @@
                 <span>BANYAK DATA DI LATIH (%) :</span>
                 <input type="number" min="1" max="99" step="0.01" class="input-percentage" name="split" style="width: 100px;" value="{{ split_ratio|default:'' }}" required>
               </div>
+
+              <div class="dropdown-box d-flex justify-content-between align-items-center" style="margin-top: 20px;">
+                  {% if prob_info %}
+                     <a href="#" data-toggle="modal" data-target="#probModal">Informasi Probabilitas</a>
+                  {% else %}
+                     <p>Informasi Probabilitas</p>
+                  {% endif %}
+               </div>
     
-               <div class="box ak-box mb-3" style="margin-top: 120px;">
+               <div class="box ak-box mb-3" style="margin-top: 40px;">
                   <div class="text-center mb-2">
                      <h5>AKURASI PELATIHAN</h5>
                   </div>
@@ -421,5 +429,106 @@
                }
             });
         </script>
+
+        <div class="modal fade" id="probModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+               <div class="modal-content">
+                  <div class="modal-header">
+                  <h5 class="modal-title">Perhitungan Probabilitas Naive Bayes</h5>
+                  <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                  </div>
+                  <div class="modal-body">
+
+                  {% if prob_info %}
+                     {% load custom_tags %}
+                     <h6>Prior Probabilities</h6>
+                     <ul>
+                     {% for stat in prob_info.kelas_stats %}
+                        <li>{{ stat.kelas }} : {{ stat.prior|floatformat:4 }} (jumlah: {{ stat.jumlah }})</li>
+                     {% endfor %}
+                     </ul>
+
+                     <hr>
+
+                     <h6>Likelihood Jenis Kelamin</h6>
+                     <table class="table table-bordered table-sm">
+                     <thead>
+                        <tr>
+                           <th>Jenis Kelamin</th>
+                           {% for stat in prob_info.kelas_stats %}
+                           <th>{{ stat.kelas }}</th>
+                           {% endfor %}
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for row in prob_info.jenis_kelamin %}
+                           <tr>
+                           <td>{{ row.Pilihan }}</td>
+                           {% for stat in prob_info.kelas_stats %}
+                              <td>{{ row|get_item:stat.kelas|floatformat:6 }}</td>
+                           {% endfor %}
+                           </tr>
+                        {% endfor %}
+                     </tbody>
+                     </table>
+
+                     <h6>Likelihood Jurusan</h6>
+                     <table class="table table-bordered table-sm">
+                     <thead>
+                        <tr>
+                           <th>Jurusan</th>
+                           {% for stat in prob_info.kelas_stats %}
+                           <th>{{ stat.kelas }}</th>
+                           {% endfor %}
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for row in prob_info.jurusan %}
+                           <tr>
+                           <td>{{ row.Pilihan }}</td>
+                           {% for stat in prob_info.kelas_stats %}
+                              <td>{{ row|get_item:stat.kelas|floatformat:6 }}</td>
+                           {% endfor %}
+                           </tr>
+                        {% endfor %}
+                     </tbody>
+                     </table>
+
+                     <h6>Likelihood Pertanyaan (P1–P15)</h6>
+                     <table class="table table-bordered table-sm">
+                        <thead>
+                           <tr>
+                              <th>Pertanyaan</th>
+                              <th>Pilihan</th>
+                              {% for stat in prob_info.kelas_stats %}
+                              <th>{{ stat.kelas }}</th>
+                              {% endfor %}
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {% for row in prob_info.pertanyaan %}
+                              <tr>
+                              {% if forloop.counter0|divisibleby:5 %}
+                                 <td rowspan="5" style="vertical-align: middle; text-align: center;">{{ row.Pertanyaan }}</td>
+                              {% endif %}
+                              <td style="vertical-align: middle; text-align: center;">{{ row.Pilihan }}</td>
+                              {% for stat in prob_info.kelas_stats %}
+                                 <td>{{ row|get_item:stat.kelas|floatformat:6 }}</td>
+                              {% endfor %}
+                              </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+
+                  {% else %}
+                     <p>Belum ada informasi probabilitas, silakan latih data dulu.</p>
+                  {% endif %}
+
+                  </div>
+               </div>
+            </div>
+         </div>
+
+
     </body>
 </html>

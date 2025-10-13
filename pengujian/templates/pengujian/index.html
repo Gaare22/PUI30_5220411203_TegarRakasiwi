@@ -258,8 +258,19 @@
                   <input type="file" name="csv_file" id="csv_file" accept=".csv" style="display: none;" onchange="submitCSVPreview()">
                </div>
                </div>
+
+               
+               <div class="box mb-3" style="height: 180px; margin-top: 27px;">
+                  <h5 class="mb-2" style="margin-top: -10px;">STATISTIK PENGUJIAN</h5>
+                  <div class="d-flex flex-column justify-content-center h-100" style="margin-top: 15px;">
+                     <p>Jumlah Data : <b>{{ jumlah_data }}</b></p>
+                     <p>Prediksi Benar : <b style="color:green;">{{ jumlah_benar }}</b></p>
+                     <p>Prediksi Salah : <b style="color:red;">{{ jumlah_salah }}</b></p>
+                  </div>
+               </div>
+               
     
-               <div class="box ak-box mb-3" style="margin-top: 220px;">
+               <div class="box ak-box mb-3" style="margin-top: 0px;">
                   <div class="text-center mb-2">
                      <h5>AKURASI PENGUJIAN</h5>
                   </div>

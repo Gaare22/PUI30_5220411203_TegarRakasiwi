@@ -27,7 +27,10 @@ def index(request):
         'data_preview': None,
         'accuracy': None,
         'error': None,
-        'selected_source': None
+        'selected_source': None,
+        'jumlah_data': 0,
+        'jumlah_benar': 0,
+        'jumlah_salah': 0,
     }
 
     aksi = request.POST.get('aksi') or request.GET.get('aksi') or 'preview'
@@ -98,9 +101,33 @@ def index(request):
         if aksi == 'uji':
             model = joblib.load('tmp/model.pkl')
             y_pred = model.predict(X)
+
+            #penambahan hasil probabilitas perkelas
+            if hasattr(model, "predict_proba"):
+                y_probs = model.predict_proba(X)
+                classes = model.classes_
+                for i, cls in enumerate(classes):
+                    df_preview[f"prob_{cls}"] = y_probs[:, i].round(3)
+
+            #hasil prediksi
+            df_preview["prob_output"] = y_pred
+
+            #hitung akurasi
             cm = confusion_matrix(y, y_pred)
             accuracy = np.trace(cm)/np.sum(cm)
             context['accuracy'] = f"{accuracy * 100:.2f}"
+
+            # Update records & columns agar tabel ikut menampilkan kolom baru
+            records = df_preview.values.tolist()
+            columns = df_preview.columns.tolist()
+            paginator = Paginator(records, 10)
+            page_obj = paginator.get_page(page_number)
+
+            context['jumlah_data'] = len(y)
+            context['jumlah_benar'] = int((y_pred == y).sum())
+            context['jumlah_salah'] = int((y_pred != y).sum())
+            context['columns'] = columns
+            context['page_obj'] = page_obj
 
     except Exception as e:
         error_detail = traceback.format_exc()
