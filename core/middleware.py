@@ -12,9 +12,14 @@ class AdminLoginRequiredMiddleware:
             "/",              # halaman root
             "/prediksi/",     # halaman prediksi publik
             "/media/",
+            "/media/gambar_gaya_belajar/",
             "/admin/",
-            "/perhitungan/"
+            "/perhitungan/",
         ]
+
+        # lewati semua file media
+        if request.path.startswith("/media/"):
+            return self.get_response(request)
 
         # Kalau request path ada di allowed → lewati
         if request.path in allowed_paths:

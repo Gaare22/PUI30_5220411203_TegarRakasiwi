@@ -109,7 +109,28 @@
         color: white;
         border-color: #f0390f;
       }
-      
+
+      #hoverText:hover{
+         color: #f0390f;
+      }
+
+      /* Pastikan semua tabel hasil data_preview rata tengah */
+      #data-content table {
+      width: 100%;
+      text-align: center;
+      }
+
+      /* Header tabel tetap di tengah */
+      #data-content th {
+      text-align: center !important;
+      }
+
+      /* Isi tabel juga di tengah */
+      #data-content td {
+      text-align: center !important;
+      vertical-align: middle;
+      }
+            
       </style>
    </head>
    <!-- body -->
@@ -191,6 +212,35 @@
                      Silakan pilih sumber data.
                   {% endif %}
                </div>
+               {% if num_pages > 1 %}
+                  <nav aria-label="Page navigation">
+                  <ul class="pagination justify-content-center">
+                     {% if current_page > 1 %}
+                        <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ current_page|add:-1 }}">Previous</a></li>
+                     {% else %}
+                        <li class="page-item disabled"><span class="page-link">First</span></li>
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                     {% endif %}
+
+                     {% for i in num_pages|make_list %}
+                        {% if forloop.counter == current_page %}
+                        <li class="page-item active"><span class="page-link">{{ forloop.counter }}</span></li>
+                        {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ forloop.counter }}">{{ forloop.counter }}</a></li>
+                        {% endif %}
+                     {% endfor %}
+
+                     {% if current_page < num_pages %}
+                        <li class="page-item"><a class="page-link" href="?page={{ current_page|add:1 }}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ num_pages }}">Last</a></li>
+                     {% else %}
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                        <li class="page-item disabled"><span class="page-link">Last</span></li>
+                     {% endif %}
+                  </ul>
+                  </nav>
+               {% endif %}
               </div>
             </div>
           </div>
@@ -216,12 +266,22 @@
                 <input type="number" min="1" max="99" step="0.01" class="input-percentage" name="split" style="width: 100px;" value="{{ split_ratio|default:'' }}" required>
               </div>
 
-              <div class="dropdown-box d-flex justify-content-between align-items-center" style="margin-top: 20px;">
-                  {% if prob_info %}
-                     <a href="#" data-toggle="modal" data-target="#probModal">Informasi Probabilitas</a>
-                  {% else %}
-                     <p>Informasi Probabilitas</p>
-                  {% endif %}
+              <div class="dropdown-box d-flex justify-content-between align-items-center" style="margin-top: 20px; height: 64px;">
+                  <div class="inpo_prob">
+                     {% if prob_info %}
+                        <a href="#" data-toggle="modal" data-target="#probModal" id="hoverText">Informasi Probabilitas</a>
+                     {% else %}
+                        <p style="margin-top: 16px;">Informasi Probabilitas</p>
+                     {% endif %}
+                  </div>
+
+                  <div class="selected_features">
+                     {% if selected_features %}
+                        <a href="#" data-toggle="modal" data-target="#featureModal" id="hoverText">Features Terpilih</a>
+                     {% else %}
+                        <p style="margin-top: 16px;">Features Terpilih</p>
+                     {% endif %}
+                  </div>
                </div>
     
                <div class="box ak-box mb-3" style="margin-top: 40px;">
@@ -237,11 +297,7 @@
                         <div style="color: red;">{{ error }}</div>
                      {% endif %}
                   </div>
-
-                     <!-- {% if akurasi %}
-                        <div style="margin-top: 50px;">Akurasi Pelatihan: {{ akurasi }}%</div>
-                     {% endif %} -->
-               </div>
+               </div>               
 
                <div>
                   <button type="submit" class="btn btn-secondary btn-rounded w-100 submit">LATIH DATA</button>
@@ -364,40 +420,78 @@
                     html += `<nav aria-label="Page navigation">
                                 <ul class="pagination justify-content-center">`;
 
-                    // Tombol Previous
-                    if (current_page > 1) {
+                  //   // Tombol Previous
+                  //   if (current_page > 1) {
+                  //       html += `<li class="page-item">
+                  //                   <a class="page-link" href="javascript:void(0)" onclick="loadPage(${current_page - 1})">Previous</a>
+                  //               </li>`;
+                  //   } else {
+                  //       html += `<li class="page-item disabled">
+                  //                   <span class="page-link">Previous</span>
+                  //               </li>`;
+                  //   }
+
+                    // Tombol "First" dan "Previous"
+                     if (current_page > 1) {
+                        html += `<li class="page-item">
+                                    <a class="page-link" href="javascript:void(0)" onclick="loadPage(1)">First</a>
+                                 </li>`;
                         html += `<li class="page-item">
                                     <a class="page-link" href="javascript:void(0)" onclick="loadPage(${current_page - 1})">Previous</a>
-                                </li>`;
-                    } else {
-                        html += `<li class="page-item disabled">
-                                    <span class="page-link">Previous</span>
-                                </li>`;
-                    }
+                                 </li>`;
+                     } else {
+                        html += `<li class="page-item disabled"><span class="page-link">First</span></li>`;
+                        html += `<li class="page-item disabled"><span class="page-link">Previous</span></li>`;
+                     }
 
-                    // Nomor halaman
-                    for (let i = 1; i <= num_pages; i++) {
+                     // Tampilkan hanya 3 halaman di sekitar current_page
+                     let startPage = Math.max(1, current_page - 1);
+                     let endPage = Math.min(num_pages, current_page + 1);
+
+                     if (startPage > 1) {
+                        html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                     }
+
+                     for (let i = startPage; i <= endPage; i++) {
                         if (i === current_page) {
-                            html += `<li class="page-item active">
-                                        <span class="page-link" style="background-color:#f0390f; border-color:#f0390f;">${i}</span>
+                           html += `<li class="page-item active">
+                                       <span class="page-link" style="background-color:#f0390f; border-color:#f0390f;">${i}</span>
                                     </li>`;
                         } else {
-                            html += `<li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)" onclick="loadPage(${i})">${i}</a>
+                           html += `<li class="page-item">
+                                       <a class="page-link" href="javascript:void(0)" onclick="loadPage(${i})">${i}</a>
                                     </li>`;
                         }
-                    }
+                     }
 
-                    // Tombol Next
-                    if (current_page < num_pages) {
+                     if (endPage < num_pages) {
+                        html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                     }
+
+                     // Tombol "Next" dan "Last"
+                     if (current_page < num_pages) {
                         html += `<li class="page-item">
                                     <a class="page-link" href="javascript:void(0)" onclick="loadPage(${current_page + 1})">Next</a>
-                                </li>`;
-                    } else {
-                        html += `<li class="page-item disabled">
-                                    <span class="page-link">Next</span>
-                                </li>`;
-                    }
+                                 </li>`;
+                        html += `<li class="page-item">
+                                    <a class="page-link" href="javascript:void(0)" onclick="loadPage(${num_pages})">Last</a>
+                                 </li>`;
+                     } else {
+                        html += `<li class="page-item disabled"><span class="page-link">Next</span></li>`;
+                        html += `<li class="page-item disabled"><span class="page-link">Last</span></li>`;
+                     }
+
+
+                  //   // Tombol Next
+                  //   if (current_page < num_pages) {
+                  //       html += `<li class="page-item">
+                  //                   <a class="page-link" href="javascript:void(0)" onclick="loadPage(${current_page + 1})">Next</a>
+                  //               </li>`;
+                  //   } else {
+                  //       html += `<li class="page-item disabled">
+                  //                   <span class="page-link">Next</span>
+                  //               </li>`;
+                  //   }
 
                     html += `</ul></nav>`;
                     }
@@ -428,8 +522,40 @@
                   e.preventDefault();
                }
             });
+
+            document.querySelector('.submit').addEventListener('click', function (e) {
+               e.preventDefault();
+
+               const formData = new FormData();
+               formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+               formData.append('source', document.querySelector('#dataSource').value);
+               formData.append('split', document.querySelector('input[name="split"]').value);
+
+               fetch('/pelatihan/', {
+                  method: 'POST',
+                  body: formData
+               })
+               .then(res => res.text())
+               .then(html => {
+                  // Update hanya bagian kanan (akurasi dan info probabilitas)
+                  const parser = new DOMParser();
+                  const doc = parser.parseFromString(html, 'text/html');
+
+                  // Ambil bagian akurasi dan probabilitas dari hasil response
+                  const akurasiBox = doc.querySelector('.ak-box').innerHTML;
+                  document.querySelector('.ak-box').innerHTML = akurasiBox;
+
+                  const probBox = doc.querySelector('[data-target="#probModal"]')?.outerHTML;
+                  if (probBox) {
+                        document.querySelector('.dropdown-box:last-child').innerHTML = probBox;
+                  }
+
+                  alert("Pelatihan selesai! Akurasi diperbarui tanpa reload halaman.");
+               });
+            });
         </script>
 
+         <!-- Modal Informasi Probabilitas -->
         <div class="modal fade" id="probModal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                <div class="modal-content">
@@ -524,6 +650,29 @@
                      <p>Belum ada informasi probabilitas, silakan latih data dulu.</p>
                   {% endif %}
 
+                  </div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Modal Fitur Terpilih -->
+         <div class="modal fade" id="featureModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+               <div class="modal-content">
+                  <div class="modal-header">
+                     <h5 class="modal-title">Fitur Terpilih (Wrapper Selection)</h5>
+                     <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
+                  </div>
+                  <div class="modal-body">
+                     {% if selected_features %}
+                        <ul style="list-style-type: square; padding-left: 25px;">
+                           {% for feature in selected_features %}
+                              <li>{{ feature }}</li>
+                           {% endfor %}
+                        </ul>
+                     {% else %}
+                        <p>Belum ada fitur yang terpilih. Silakan lakukan pelatihan data terlebih dahulu.</p>
+                     {% endif %}
                   </div>
                </div>
             </div>

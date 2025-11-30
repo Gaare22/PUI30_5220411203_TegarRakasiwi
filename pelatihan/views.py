@@ -4,6 +4,7 @@ import chardet
 import io
 import pandas as pd
 import numpy as np
+import joblib
 from .nb_logic import generate_likelihood_table_from_df
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -14,7 +15,45 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.naive_bayes import CategoricalNB, GaussianNB
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
+from django.conf import settings
+from mlxtend.feature_selection import SequentialFeatureSelector as SFS
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import StratifiedKFold
 
+import os
+from django.conf import settings
+
+def save_split_to_csv(X_train, X_test, y_train, y_test,
+                      jurusan_decode, jenis_kelamin_decode):
+    """
+    Menggabungkan kembali fitur + target,
+    melakukan decode kolom kategorikal,
+    lalu menyimpan hasilnya ke folder tmp/ sebagai CSV.
+    """
+
+    # Gabungkan fitur dan target
+    train_df = X_train.copy()
+    train_df["real_target"] = y_train.values
+
+    test_df = X_test.copy()
+    test_df["real_target"] = y_test.values
+
+    # Decode kembali
+    train_df["jurusan"] = train_df["jurusan"].map(jurusan_decode)
+    test_df["jurusan"] = test_df["jurusan"].map(jurusan_decode)
+
+    train_df["jenis_kelamin"] = train_df["jenis_kelamin"].map(jenis_kelamin_decode)
+    test_df["jenis_kelamin"] = test_df["jenis_kelamin"].map(jenis_kelamin_decode)
+
+    # Tentukan lokasi folder tmp
+    train_path = os.path.join(settings.BASE_DIR, "tmp", "data_pelatihan.csv")
+    test_path = os.path.join(settings.BASE_DIR, "tmp", "data_pengujian.csv")
+
+    # Simpan CSV
+    train_df.to_csv(train_path, index=False, encoding="utf-8-sig")
+    test_df.to_csv(test_path, index=False, encoding="utf-8-sig")
+
+    return train_path, test_path
 
 
 # Create your views here.
@@ -30,6 +69,7 @@ def index(request):
     data_preview = None
     int_split_input = None
     prob_info = None
+    selected_features = None
 
     if request.method == "POST":
         split_input = float(request.POST.get("split", 80)) 
@@ -61,18 +101,6 @@ def index(request):
         if 'real_target' not in data.columns:
             error = "Kolom 'real_target' tidak ditemukan dalam data."
             return render(request, "pelatihan/index.html", {"akurasi": None, "error": error})
-
-        # Label y
-        # label_encoder = LabelEncoder()
-        # y = label_encoder.fit_transform(y)
-
-        # encoders = {}
-        # for col in X.columns:
-        #     le = LabelEncoder()
-        #     # X_train[col] = le.fit_transform(X_train[col])
-        #     # X_test[col] = le.fit_transform(X_test[col])
-        #     X[col] = le.fit_transform(X[col])
-        #     encoders[col] = le
 
         jurusan_map = {
             "Administrasi Perkantoran": 0,
@@ -108,9 +136,16 @@ def index(request):
         jurusan_decode = {v: k for k, v in jurusan_map.items()}
         jenis_kelamin_decode = {v: k for k, v in jenis_kelamin_map.items()}
 
+        # Cek baris yang memiliki nilai kosong di kolom penting
+        print("Jumlah data awal:", len(data))
+        kolom_kritis = ["jenis_kelamin", "jurusan"] + [f"P{i}" for i in range(1, 16)] + ["real_target"]
+        missing = data[data[kolom_kritis].isnull().any(axis=1)]
+        print("Jumlah data mengandung NaN:", len(missing))
+        print("Kolom yang bermasalah:\n", data.isnull().sum()[data.isnull().sum() > 0])
+        print("Contoh data kosong:\n", missing.head(10))
+
         data["jurusan"] = data["jurusan"].map(jurusan_map)
         data["jenis_kelamin"] = data["jenis_kelamin"].map(jenis_kelamin_map)
-        data.dropna(inplace=True)
 
         print(data.isnull().sum()[data.isnull().sum() > 0])
         baris_nan = data[data.isnull().any(axis=1)]
@@ -130,6 +165,15 @@ def index(request):
         # Split data
         X_train, X_test, y_train, y_test = train_test_split(X, y, train_size=split_ratio, random_state=42, shuffle=True, stratify=y)
 
+        # Panggil fungsi untuk menggabungkan kembali fitur dan target untuk disimpan ke CSV
+        train_path, test_path = save_split_to_csv(
+            X_train, X_test, y_train, y_test,
+            jurusan_decode, jenis_kelamin_decode
+        )
+
+        print(f" Data pelatihan disimpan ke: {train_path}")
+        print(f" Data pengujian disimpan ke: {test_path}")
+
         # Simpan hasil split sementara
         split_data = {
             "X_train": X_train,
@@ -143,22 +187,46 @@ def index(request):
 
         # pelatihan model    
         model = CategoricalNB()
-        model.fit(X_train, y_train)
-        train_pred = model.predict(X_train)
+
+        # Selection Feature
+        sfs = SFS(
+            model,
+            k_features='best',      # pilih jumlah fitur terbaik otomatis
+            forward=True,           # True: forward selection, False: backward elimination
+            floating=False,         # kalau True = SFFS (lebih fleksibel)
+            scoring='accuracy',
+            cv=5,                   # 5-fold cross validation
+            n_jobs=-1,              # gunakan semua core CPU
+        )
+
+        # Jalankan seleksi fitur
+        sfs = sfs.fit(X_train, y_train)
+
+        # Fitur terpilih
+        selected_features = list(sfs.k_feature_names_)
+        print("Fitur terpilih:", selected_features)
+
+        # Gunakan hanya fitur terpilih untuk training ulang model
+        X_train_selected = X_train[selected_features]
+        X_test_selected = X_test[selected_features]
+
+        # Latih model dengan fitur terpilih
+        model.fit(X_train_selected, y_train)
+        train_pred = model.predict(X_train_selected)
+
         cm = confusion_matrix(y_train, train_pred)
         accuracy = np.trace(cm)/np.sum(cm)
         akurasi = round(accuracy * 100, 2)
 
         int_split_input = int(split_input)
 
-        import joblib
-        from django.conf import settings
-
         path_model = os.path.join(settings.BASE_DIR, 'tmp', 'model.pkl')
         path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
+        path_features = os.path.join(settings.BASE_DIR, 'tmp', 'selected_features.pkl')
 
         # joblib.dump(model, 'tmp/model.pkl')
         joblib.dump(model, path_model)
+        joblib.dump(selected_features, path_features)
         joblib.dump(split_data, "tmp/split_data.pkl")
 
         train_df = X_train.copy()
@@ -183,7 +251,6 @@ def index(request):
             ]
         }
 
-
     return render(request, "pelatihan/index.html", {
         "akurasi": akurasi,
         "error": error,
@@ -191,6 +258,7 @@ def index(request):
         "split_ratio": int_split_input,
         "data_preview": data_preview,
         "prob_info": prob_info,
+        "selected_features": selected_features,
         })
 
 def get_data_database(request):
@@ -248,6 +316,4 @@ def upload_csv_view(request):
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)})
     return JsonResponse({'success': False, 'error': 'Invalid request'})
-
-# def pelatihan_view(request):
     

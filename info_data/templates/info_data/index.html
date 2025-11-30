@@ -269,46 +269,53 @@
                html += "</table>";
 
                if (num_pages > 1) {
-                    html += `<nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center">`;
+                  html += `<nav aria-label="Page navigation">
+                              <ul class="pagination justify-content-center">`;
 
-                    // Tombol Previous
-                    if (current_page > 1) {
-                        html += `<li class="page-item">
-                                    <a class="page-link" href="javascript:void(0)" onclick="loadPage(${current_page - 1})">Previous</a>
-                                </li>`;
-                    } else {
-                        html += `<li class="page-item disabled">
-                                    <span class="page-link">Previous</span>
-                                </li>`;
-                    }
+                  // Tombol First
+                  if (current_page > 1) {
+                     html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPage(1)">First</a></li>`;
+                  } else {
+                     html += `<li class="page-item disabled"><span class="page-link">First</span></li>`;
+                  }
 
-                    // Nomor halaman
-                    for (let i = 1; i <= num_pages; i++) {
-                        if (i === current_page) {
-                            html += `<li class="page-item active">
-                                        <span class="page-link" style="background-color:#f0390f; border-color:#f0390f;">${i}</span>
-                                    </li>`;
-                        } else {
-                            html += `<li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)" onclick="loadPage(${i})">${i}</a>
-                                    </li>`;
-                        }
-                    }
+                  // Tombol Previous
+                  if (current_page > 1) {
+                     html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPage(${current_page - 1})">Previous</a></li>`;
+                  } else {
+                     html += `<li class="page-item disabled"><span class="page-link">Previous</span></li>`;
+                  }
 
-                    // Tombol Next
-                    if (current_page < num_pages) {
-                        html += `<li class="page-item">
-                                    <a class="page-link" href="javascript:void(0)" onclick="loadPage(${current_page + 1})">Next</a>
-                                </li>`;
-                    } else {
-                        html += `<li class="page-item disabled">
-                                    <span class="page-link">Next</span>
-                                </li>`;
-                    }
+                  // Nomor halaman (maks. 3 tampilan terdekat)
+                  let start = Math.max(1, current_page - 1);
+                  let end = Math.min(num_pages, current_page + 1);
 
-                    html += `</ul></nav>`;
-                    }
+                  if (start > 1) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                  for (let i = start; i <= end; i++) {
+                     if (i === current_page) {
+                           html += `<li class="page-item active"><span class="page-link" style="background-color:#f0390f;border-color:#f0390f;">${i}</span></li>`;
+                     } else {
+                           html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPage(${i})">${i}</a></li>`;
+                     }
+                  }
+                  if (end < num_pages) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+
+                  // Tombol Next
+                  if (current_page < num_pages) {
+                     html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPage(${current_page + 1})">Next</a></li>`;
+                  } else {
+                     html += `<li class="page-item disabled"><span class="page-link">Next</span></li>`;
+                  }
+
+                  // Tombol Last
+                  if (current_page < num_pages) {
+                     html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPage(${num_pages})">Last</a></li>`;
+                  } else {
+                     html += `<li class="page-item disabled"><span class="page-link">Last</span></li>`;
+                  }
+
+                  html += `</ul></nav>`;
+               }
 
                document.getElementById("data-content").innerHTML = html;
             }
@@ -330,46 +337,54 @@
                html += "</table>";
 
                if (num_pages > 1) {
-                    html += `<nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center">`;
+                  html += `<nav aria-label="Page navigation">
+                              <ul class="pagination justify-content-center">`;
 
-                    // Tombol Previous
-                    if (current_page > 1) {
-                        html += `<li class="page-item">
-                                    <a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${current_page - 1})">Previous</a>
-                                </li>`;
-                    } else {
-                        html += `<li class="page-item disabled">
-                                    <span class="page-link">Previous</span>
-                                </li>`;
-                    }
+                  // Tombol First
+                  if (current_page > 1) {
+                     html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPagePred(1)">First</a></li>`;
+                  } else {
+                     html += `<li class="page-item disabled"><span class="page-link">First</span></li>`;
+                  }
 
-                    // Nomor halaman
-                    for (let i = 1; i <= num_pages; i++) {
-                        if (i === current_page) {
-                            html += `<li class="page-item active">
-                                        <span class="page-link" style="background-color:#f0390f; border-color:#f0390f;">${i}</span>
-                                    </li>`;
-                        } else {
-                            html += `<li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${i})">${i}</a>
-                                    </li>`;
-                        }
-                    }
+                  // Tombol Previous
+                  if (current_page > 1) {
+                     html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${current_page - 1})">Previous</a></li>`;
+                  } else {
+                     html += `<li class="page-item disabled"><span class="page-link">Previous</span></li>`;
+                  }
 
-                    // Tombol Next
-                    if (current_page < num_pages) {
-                        html += `<li class="page-item">
-                                    <a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${current_page + 1})">Next</a>
-                                </li>`;
-                    } else {
-                        html += `<li class="page-item disabled">
-                                    <span class="page-link">Next</span>
-                                </li>`;
-                    }
+                  // Nomor halaman (maks. 3 tampilan terdekat)
+                  let start = Math.max(1, current_page - 1);
+                  let end = Math.min(num_pages, current_page + 1);
 
-                    html += `</ul></nav>`;
-                    }
+                  if (start > 1) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+                  for (let i = start; i <= end; i++) {
+                     if (i === current_page) {
+                           html += `<li class="page-item active"><span class="page-link" style="background-color:#f0390f;border-color:#f0390f;">${i}</span></li>`;
+                     } else {
+                           html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${i})">${i}</a></li>`;
+                     }
+                  }
+                  if (end < num_pages) html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+
+                  // Tombol Next
+                  if (current_page < num_pages) {
+                     html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${current_page + 1})">Next</a></li>`;
+                  } else {
+                     html += `<li class="page-item disabled"><span class="page-link">Next</span></li>`;
+                  }
+
+                  // Tombol Last
+                  if (current_page < num_pages) {
+                     html += `<li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="loadPagePred(${num_pages})">Last</a></li>`;
+                  } else {
+                     html += `<li class="page-item disabled"><span class="page-link">Last</span></li>`;
+                  }
+
+                  html += `</ul></nav>`;
+               }
+
 
                document.getElementById("data-content").innerHTML = html;
             }

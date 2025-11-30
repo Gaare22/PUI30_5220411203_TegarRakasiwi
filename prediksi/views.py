@@ -11,9 +11,11 @@ import re
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path_model = os.path.join(settings.BASE_DIR, 'tmp', 'model.pkl')
 path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
+path_features = os.path.join(settings.BASE_DIR, 'tmp', 'selected_features.pkl')
 
 def prediksi_view(request):
     if request.method == 'POST':
+        # Cek Model Tersedia
         if not os.path.exists(path_model):
             messages.error(request, "Model Belum dibuat")
             return render(request, 'prediksi/kuisioner.html')
@@ -123,16 +125,17 @@ def prediksi_view(request):
             "Perempuan": 1,
         }
 
-        #load model dan split data
-        model = joblib.load(path_model)
-        split_data = joblib.load(path_split_data)
-
         #encode jurusan dan jenis kelamin
         jurusan_encoded = jurusan_map.get(jurusan, -1)
         jenis_kelamin_encoded = jenis_kelamin_map.get(jenis_kelamin, -1)
 
+        #load model, split data, dan selection features
+        model = joblib.load(path_model)
+        split_data = joblib.load(path_split_data)
+        feature_names = split_data['fitur']
+
         #fitur fitur yang dijadikan input
-        fitur_input = [
+        all_fitur_input = [
             jenis_kelamin_encoded,
             jurusan_encoded,
             int(P1), int(P2), int(P3), int(P4), int(P5),
@@ -141,16 +144,23 @@ def prediksi_view(request):
         ]
 
         #debugg
-        print("fitur_input:", fitur_input)
-        print("jumlah fitur:", len(fitur_input))
+        print("fitur_input:", all_fitur_input)
+        print("jumlah fitur:", len(all_fitur_input))
         print("model expects:", model.n_features_in_)
 
         #ubah nilai kuisioner menjadi dataframe
-        feature_names = split_data['fitur']
-        input_df = pd.DataFrame([fitur_input], columns=feature_names)
+        input_df = pd.DataFrame([all_fitur_input], columns=feature_names)
+
+        # Selection Feature
+        if os.path.exists(path_features):
+            selected_features = joblib.load(path_features)
+            input_selected = input_df[selected_features]
+        else:
+            selected_features = feature_names
+            input_selected = input_df
 
         # Lakukan prediksi
-        hasil = model.predict(input_df)[0]
+        hasil = model.predict(input_selected)[0]
         
         if hasil == "Auditori":
             hsl = GayaBelajar.objects.get(id_gaya_belajar=1)

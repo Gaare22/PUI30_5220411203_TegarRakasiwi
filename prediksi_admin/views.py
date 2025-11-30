@@ -6,13 +6,13 @@ import pandas as pd
 import os
 import joblib
 from django.shortcuts import redirect
-
 import re
 
 #lokasi model
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 path_model = os.path.join(settings.BASE_DIR, 'tmp', 'model.pkl')
 path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
+path_features = os.path.join(settings.BASE_DIR, 'tmp', 'selected_features.pkl')
 
 def prediksi_view(request):
     # cek session admin
@@ -125,13 +125,16 @@ def prediksi_view(request):
             "Perempuan": 1,
         }
 
-        model = joblib.load(path_model)
-        split_data = joblib.load(path_split_data)
-
         jurusan_encoded = jurusan_map.get(jurusan, -1)
         jenis_kelamin_encoded = jenis_kelamin_map.get(jenis_kelamin, -1)
+        
+        #load model, split data, dan selection features
+        model = joblib.load(path_model)
+        split_data = joblib.load(path_split_data)
+        feature_names = split_data['fitur']
 
-        fitur_input = [
+        #fitur fitur yang dijadikan input
+        all_fitur_input = [
             jenis_kelamin_encoded,
             jurusan_encoded,
             int(P1), int(P2), int(P3), int(P4), int(P5),
@@ -139,11 +142,19 @@ def prediksi_view(request):
             int(P11), int(P12), int(P13), int(P14), int(P15)
         ]
 
-        # Lakukan prediksi
-        feature_names = split_data['fitur']
-        input_df = pd.DataFrame([fitur_input], columns=feature_names)
+        # Ubah nilai kuisioner menjadi dataframe
+        input_df = pd.DataFrame([all_fitur_input], columns=feature_names)
+
+        # Selection Feature
+        if os.path.exists(path_features):
+            selected_features = joblib.load(path_features)
+            input_selected = input_df[selected_features]
+        else:
+            selected_features = feature_names
+            input_selected = input_df
        
-        hasil = model.predict(input_df)[0]
+        # Lakukan prediksi
+        hasil = model.predict(input_selected)[0]
 
         if hasil == "Auditori":
             hsl = GayaBelajarAdmin.objects.get(id_gaya_belajar=1)

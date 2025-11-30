@@ -206,9 +206,9 @@
                         </tbody>
                      </table>
 
-                     <nav>
+                     <!-- <nav>
                         <ul class="pagination justify-content-center">
-                           <!-- Always show Previous -->
+
                            <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
                               <a class="page-link" href="?page={% if page_obj.has_previous %}{{ page_obj.previous_page_number }}{% else %}1{% endif %}&aksi={{ aksi }}">Previous</a>
                            </li>
@@ -225,12 +225,69 @@
                               {% endif %}
                            {% endfor %}
 
-                           <!-- Always show Next -->
+
                            <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
                               <a class="page-link" href="?page={% if page_obj.has_next %}{{ page_obj.next_page_number }}{% else %}{{ page_obj.paginator.num_pages }}{% endif %}&aksi={{ aksi }}">Next</a>
                            </li>
                         </ul>
+                     </nav> -->
+
+                     {% with aksi_param=accuracy|yesno:'uji,preview' %}
+                     <nav>
+                     <ul class="pagination justify-content-center">
+
+                        <!-- Tombol First -->
+                        <li class="page-item {% if page_obj.number == 1 %}disabled{% endif %}">
+                           <a class="page-link" 
+                              href="?page=1&aksi={{ aksi_param }}&sumber_data={{ selected_source }}">First</a>
+                        </li>
+
+                        <!-- Tombol Previous -->
+                        <li class="page-item {% if not page_obj.has_previous %}disabled{% endif %}">
+                           <a class="page-link" 
+                              href="?page={% if page_obj.has_previous %}{{ page_obj.previous_page_number }}{% else %}1{% endif %}&aksi={{ aksi_param }}&sumber_data={{ selected_source }}">
+                              Previous
+                           </a>
+                        </li>
+
+                        <!-- Nomor halaman dinamis -->
+                        {% for num in page_obj.paginator.page_range %}
+                           {% if num == page_obj.number %}
+                              <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                           {% elif num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                              <li class="page-item"><a class="page-link" href="?page={{ num }}&aksi={{ aksi_param }}&sumber_data={{ selected_source }}">{{ num }}</a></li>
+                           {% elif num == 1 %}
+                              <li class="page-item"><a class="page-link" href="?page=1&aksi={{ aksi_param }}&sumber_data={{ selected_source }}">1</a></li>
+                              {% if page_obj.number > 4 %}
+                                 <li class="page-item disabled"><span class="page-link">...</span></li>
+                              {% endif %}
+                           {% elif num == page_obj.paginator.num_pages %}
+                              {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
+                                 <li class="page-item disabled"><span class="page-link">...</span></li>
+                              {% endif %}
+                              <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&aksi={{ aksi_param }}&sumber_data={{ selected_source }}">{{ page_obj.paginator.num_pages }}</a></li>
+                           {% endif %}
+                        {% endfor %}
+
+                        <!-- Tombol Next -->
+                        <li class="page-item {% if not page_obj.has_next %}disabled{% endif %}">
+                           <a class="page-link" 
+                              href="?page={% if page_obj.has_next %}{{ page_obj.next_page_number }}{% else %}{{ page_obj.paginator.num_pages }}{% endif %}&aksi={{ aksi_param }}&sumber_data={{ selected_source }}">
+                              Next
+                           </a>
+                        </li>
+
+                        <!-- Tombol Last -->
+                        <li class="page-item {% if page_obj.number == page_obj.paginator.num_pages %}disabled{% endif %}">
+                           <a class="page-link" 
+                              href="?page={{ page_obj.paginator.num_pages }}&aksi={{ aksi_param }}&sumber_data={{ selected_source }}">
+                              Last
+                           </a>
+                        </li>
+                     </ul>
                      </nav>
+                     {% endwith %}
+
 
 
                      {% else %}

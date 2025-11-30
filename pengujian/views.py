@@ -17,6 +17,8 @@ from django.shortcuts import redirect
 # Lokasi file split data
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SPLIT_PATH = os.path.join(BASE_DIR, 'tmp/split_data.pkl')
+MODEL_PATH = os.path.join(BASE_DIR, 'tmp/model.pkl')
+FEATURE_PATH = os.path.join(BASE_DIR, 'tmp/selected_features.pkl')
 
 def index(request):
     # cek session admin
@@ -41,19 +43,27 @@ def index(request):
         context['selected_source'] = sumber_data
         request.session['sumber_data'] = sumber_data  # simpan pilihan di session
 
-    if not os.path.exists(SPLIT_PATH):
+    if not os.path.exists(SPLIT_PATH) or not os.path.exists(MODEL_PATH):
         context['error'] = 'Model belum dilatih. Silakan lakukan pelatihan terlebih dahulu.'
         return render(request, 'pengujian/index.html', context)
 
     try:
+        # Load data hasil pelatihan
         split_data = joblib.load('tmp/split_data.pkl')
 
+        # Load fitur terpilih (hasil SFS)
+        if os.path.exists(FEATURE_PATH):
+            selected_features = joblib.load(FEATURE_PATH)
+        else:
+            selected_features = split_data['fitur']
+
+        #  Ambil data berdasarkan pilihan
         if sumber_data == 'train':
-            X = split_data['X_train']
+            X = split_data['X_train'][selected_features]
             y = split_data['y_train']
 
         elif sumber_data == 'test':
-            X = split_data['X_test']
+            X = split_data['X_test'][selected_features]
             y = split_data['y_test']
 
         elif sumber_data == 'csv':
@@ -69,12 +79,13 @@ def index(request):
             if 'real_target' not in df.columns:
                 context['error'] = "Kolom 'real_target' tidak ditemukan pada file CSV."
                 return render(request, 'pengujian/index.html', context)
-
+            
             jurusan_map = {...}  # tetap sama
             jenis_kelamin_map = {...}
 
             df["jurusan"] = df["jurusan"].map(jurusan_map)
             df["jenis_kelamin"] = df["jenis_kelamin"].map(jenis_kelamin_map)
+
 
             relevant_columns = split_data['fitur']
             X = df[relevant_columns]
@@ -86,11 +97,51 @@ def index(request):
 
         # preview dengan pagination
         df_preview = X.copy()
+
+        jenis_kelamin_decode = {
+            0: "Laki-laki",
+            1: "Perempuan"
+        }
+
+        jurusan_map = {
+            "Administrasi Perkantoran": 0,
+            "Akuntansi": 1,
+            "Bahasa": 2,
+            "Desain dan Produksi Kriya": 3,
+            "Desain Komunikasi Visual": 4,
+            "Desain Pemodelan dan Informasi Bangunan": 5,
+            "Farmasi": 6,
+            "IPA": 7,
+            "IPS": 8,
+            "KEPERAWATAN": 9,
+            "Kurikulum Merdeka": 10,
+            "Multimedia": 11,
+            "Nautika Kapal Penangkap Ikan": 12,
+            "Rekayasa Perangkat Lunak": 13,
+            "Siswa Menengah Pertama": 14,
+            "Teknik Instalasi Tenaga Listrik": 15,
+            "Teknik Jaringan Komputer & Telekomunikasi": 16,
+            "Teknik Kendaraan Ringan Otomotif": 17,
+            "Teknik Mesin": 18,
+            "Teknik Pengelasan": 19,
+            "Teknik Sepeda Motor": 20,
+            "Lainnya": 21,
+        }
+
+        jurusan_decode = {v: k for k, v in jurusan_map.items()}
+
+        if "jenis_kelamin" in df_preview.columns:
+            df_preview["jenis_kelamin"] = df_preview["jenis_kelamin"].map(jenis_kelamin_decode)
+
+        if "jurusan" in df_preview.columns:
+            df_preview["jurusan"] = df_preview["jurusan"].map(jurusan_decode)
+
         df_preview['real_target'] = y
+
+        df_preview.insert(0, "No", range(1, len(df_preview) + 1))
         records = df_preview.values.tolist()
         columns = df_preview.columns.tolist()
 
-        from django.core.paginator import Paginator
         page_number = request.GET.get('page', 1)
         paginator = Paginator(records, 10)
         page_obj = paginator.get_page(page_number)
