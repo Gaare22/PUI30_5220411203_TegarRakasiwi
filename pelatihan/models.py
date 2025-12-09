@@ -28,3 +28,13 @@ class DataPelatihan(models.Model):
 
     def __str__(self):
         return self.nama
+
+class ModelStorage(models.Model):
+    nama_model = models.CharField(max_length=100, default="model_nb")
+    model_blob = models.BinaryField(null=True)               # untuk model
+    selected_features = models.BinaryField(null=True)        # list fitur terpilih
+    split_data = models.BinaryField(null=True)               # X_train, X_test, y_train, y_test
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nama_model

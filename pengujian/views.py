@@ -3,6 +3,8 @@ import joblib
 import pandas as pd
 import numpy as np
 import traceback
+import pickle
+from pelatihan.models import ModelStorage
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from sklearn.naive_bayes import CategoricalNB, GaussianNB
@@ -14,11 +16,15 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect
 
 
-# Lokasi file split data
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SPLIT_PATH = os.path.join(BASE_DIR, 'tmp/split_data.pkl')
-MODEL_PATH = os.path.join(BASE_DIR, 'tmp/model.pkl')
-FEATURE_PATH = os.path.join(BASE_DIR, 'tmp/selected_features.pkl')
+def load_model_from_db():
+    obj = ModelStorage.objects.last()
+    if obj is None:
+        return None, None, None
+    model = pickle.loads(obj.model_blob)
+    selected_features = pickle.loads(obj.selected_features)
+    split_data = pickle.loads(obj.split_data)
+
+    return model, selected_features, split_data
 
 def index(request):
     # cek session admin
@@ -43,20 +49,14 @@ def index(request):
         context['selected_source'] = sumber_data
         request.session['sumber_data'] = sumber_data  # simpan pilihan di session
 
-    if not os.path.exists(SPLIT_PATH) or not os.path.exists(MODEL_PATH):
-        context['error'] = 'Model belum dilatih. Silakan lakukan pelatihan terlebih dahulu.'
+    # Ambil model, fitur terpilih, dan split data dari database
+    model, selected_features, split_data = load_model_from_db()
+
+    if model is None:
+        context['error'] = 'Model belum dilatih atau belum disimpan ke database.'
         return render(request, 'pengujian/index.html', context)
 
     try:
-        # Load data hasil pelatihan
-        split_data = joblib.load('tmp/split_data.pkl')
-
-        # Load fitur terpilih (hasil SFS)
-        if os.path.exists(FEATURE_PATH):
-            selected_features = joblib.load(FEATURE_PATH)
-        else:
-            selected_features = split_data['fitur']
-
         #  Ambil data berdasarkan pilihan
         if sumber_data == 'train':
             X = split_data['X_train'][selected_features]
@@ -150,7 +150,7 @@ def index(request):
         context['page_obj'] = page_obj
 
         if aksi == 'uji':
-            model = joblib.load('tmp/model.pkl')
+            # model = joblib.load('tmp/model.pkl')
             y_pred = model.predict(X)
 
             #penambahan hasil probabilitas perkelas

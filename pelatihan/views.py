@@ -5,6 +5,8 @@ import io
 import pandas as pd
 import numpy as np
 import joblib
+import pickle
+from .models import ModelStorage
 from .nb_logic import generate_likelihood_table_from_df
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -224,10 +226,15 @@ def index(request):
         path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
         path_features = os.path.join(settings.BASE_DIR, 'tmp', 'selected_features.pkl')
 
-        # joblib.dump(model, 'tmp/model.pkl')
-        joblib.dump(model, path_model)
-        joblib.dump(selected_features, path_features)
-        joblib.dump(split_data, "tmp/split_data.pkl")
+        # # joblib.dump(model, 'tmp/model.pkl')
+        # joblib.dump(model, path_model)
+        # joblib.dump(selected_features, path_features)
+        # joblib.dump(split_data, "tmp/split_data.pkl")
+
+        # Serialize objek menjadi bytes
+        model_blob = pickle.dumps(model)
+        features_blob = pickle.dumps(selected_features)
+        split_blob = pickle.dumps(split_data)
 
         train_df = X_train.copy()
         train_df['real_target'] = y_train.values
@@ -250,6 +257,13 @@ def index(request):
                 for k in total_per_kelas
             ]
         }
+
+         # Simpan ke database
+        ModelStorage.objects.create(
+            model_blob=model_blob,
+            selected_features=features_blob,
+            split_data=split_blob
+        )
 
     return render(request, "pelatihan/index.html", {
         "akurasi": akurasi,

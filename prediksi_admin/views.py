@@ -1,18 +1,25 @@
+import pandas as pd
+import os
+import joblib
+import re
+import pickle
+from pelatihan.models import ModelStorage
 from django.shortcuts import render
 from .models import GayaBelajarAdmin, PrediksiGayaBelajar
 from django.conf import settings
 from django.contrib import messages
-import pandas as pd
-import os
-import joblib
 from django.shortcuts import redirect
-import re
 
-#lokasi model
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-path_model = os.path.join(settings.BASE_DIR, 'tmp', 'model.pkl')
-path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
-path_features = os.path.join(settings.BASE_DIR, 'tmp', 'selected_features.pkl')
+#load model, split data, fitur terpilih
+def load_model_from_db():
+    obj = ModelStorage.objects.last()
+    if obj is None:
+        return None, None, None
+    model = pickle.loads(obj.model_blob)
+    selected_features = pickle.loads(obj.selected_features)
+    split_data = pickle.loads(obj.split_data)
+
+    return model, selected_features, split_data
 
 def prediksi_view(request):
     # cek session admin
@@ -20,12 +27,14 @@ def prediksi_view(request):
         return redirect("login")  # balik ke halaman login
 
     if request.method == 'POST':
-        if not os.path.exists(path_model):
-            messages.error(request, "Model Belum dibuat")
-            return render(request, 'prediksi_admin/kuisioner.html')
+        model, selected_features, split_data = load_model_from_db()
+
+        if model is None:
+            messages.error(request, "Model belum dibuat. Silakan lakukan pelatihan.")
+            return render(request, "prediksi/kuisioner.html")
 
         try:
-            model = joblib.load(path_model)
+            model = model
 
         except Exception as e:
             messages.error(request, f"Terjadi kesalahan saat memuat model: {str(e)}")
@@ -128,9 +137,6 @@ def prediksi_view(request):
         jurusan_encoded = jurusan_map.get(jurusan, -1)
         jenis_kelamin_encoded = jenis_kelamin_map.get(jenis_kelamin, -1)
         
-        #load model, split data, dan selection features
-        model = joblib.load(path_model)
-        split_data = joblib.load(path_split_data)
         feature_names = split_data['fitur']
 
         #fitur fitur yang dijadikan input
@@ -146,8 +152,7 @@ def prediksi_view(request):
         input_df = pd.DataFrame([all_fitur_input], columns=feature_names)
 
         # Selection Feature
-        if os.path.exists(path_features):
-            selected_features = joblib.load(path_features)
+        if selected_features is not None:
             input_selected = input_df[selected_features]
         else:
             selected_features = feature_names

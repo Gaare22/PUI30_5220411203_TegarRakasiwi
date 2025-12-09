@@ -145,13 +145,13 @@
   </head>
   <!-- body -->
   <body class="main-layout">
-    <!-- {% if messages %}
-            {% for message in messages %}
-                <div class="alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
+        {% if messages %}
+            {% for m in messages %}
+                <script>
+                    alert("{{ m }}");
+                </script>
             {% endfor %}
-        {% endif %} -->
+        {% endif %}
 
     <!-- header -->
     <div class="header">

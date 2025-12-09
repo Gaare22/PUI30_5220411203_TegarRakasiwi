@@ -112,6 +112,15 @@
     <!-- end header inner -->
     <!-- end header -->
     <!-- top -->
+
+    {% if messages %}
+        {% for m in messages %}
+            <script>
+                alert("{{ m }}");
+            </script>
+        {% endfor %}
+    {% endif %}
+
     <div class="container">
       <form id="form-kuisioner" action="" method="POST" novalidate>
         {% csrf_token %}
