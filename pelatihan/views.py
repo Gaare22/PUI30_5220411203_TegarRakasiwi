@@ -195,7 +195,7 @@ def index(request):
             model,
             k_features='best',      # pilih jumlah fitur terbaik otomatis
             forward=True,           # True: forward selection, False: backward elimination
-            floating=False,         # kalau True = SFFS (lebih fleksibel)
+            floating=False,         # kalau True = SFFS
             scoring='accuracy',
             cv=5,                   # 5-fold cross validation
             n_jobs=-1,              # gunakan semua core CPU
@@ -221,15 +221,6 @@ def index(request):
         akurasi = round(accuracy * 100, 2)
 
         int_split_input = int(split_input)
-
-        path_model = os.path.join(settings.BASE_DIR, 'tmp', 'model.pkl')
-        path_split_data = os.path.join(settings.BASE_DIR, 'tmp', 'split_data.pkl')
-        path_features = os.path.join(settings.BASE_DIR, 'tmp', 'selected_features.pkl')
-
-        # # joblib.dump(model, 'tmp/model.pkl')
-        # joblib.dump(model, path_model)
-        # joblib.dump(selected_features, path_features)
-        # joblib.dump(split_data, "tmp/split_data.pkl")
 
         # Serialize objek menjadi bytes
         model_blob = pickle.dumps(model)

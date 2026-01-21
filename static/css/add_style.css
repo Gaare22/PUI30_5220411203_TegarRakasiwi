@@ -1,0 +1,164 @@
+/* FORCE NAVBAR DESKTOP TAMPIL */
+@media (max-width: 768px) {
+    .container,
+  .container-fluid,
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .board h3{
+    line-height: 60px !important;
+  }
+
+  .row {
+    width: 100%;
+  }
+
+    .carousel-inner{
+        height: 700px;
+        align-items: center;
+    }
+
+  /* KUNCI AREA GAMBAR */
+  .banner_img {
+    height: 300px;               /* RUANG TETAP */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* GAMBAR TIDAK BOLEH IKUT NGUBAH LAYOUT */
+  .banner_img img {
+    max-height: 280px;
+    width: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .infogabel{
+    margin-top: -100px;
+  }
+
+  .board h3, .board .link_btn{
+    margin-top: -50px;
+  }
+
+  .ketgabel{
+    margin-top: -350px;
+  }
+
+  .ketgabel .banner_img figure{
+    width: 130%;
+  }
+
+  .carousel-item {
+    height: 800px;
+    margin-top: -130px;
+    align-items: center;
+  }
+  .carousel-item {
+    transform: none !important;
+  }
+
+  /* Pakai fade */
+  .carousel-item {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out !important;
+  }
+
+  .carousel-item.active {
+    opacity: 1;
+  }
+
+  /* Cegah lompat ke atas */
+  .carousel-item-next,
+  .carousel-item-prev {
+    top: 0 !important;
+  }
+  /* CAPTION JANGAN IKUT LOMPAT */
+  .carousel-caption {
+    position: absolute;
+    transform: translateZ(0);
+  }
+
+  /* MATIKAN REFLOW SAAT TRANSISI */
+  .carousel-item-next,
+  .carousel-item-prev,
+  .carousel-item.active {
+    display: block;
+  }
+
+  .logo img{
+    width: 70%;
+  }
+
+  .navbar-toggler {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .nav{
+        margin-top: 400px;
+    }
+
+    .loginadmin{
+        display: none;
+    }
+
+  html,
+  body {
+    overflow-x: hidden !important;
+    width: 100%;
+  }
+
+  .carousel-control-next,
+  .carousel-control-prev{
+    margin-top: -100px;
+  }
+
+  .footer{
+    display: none;
+  }
+  
+
+
+}
+
+
+/* Samakan tinggi semua slide */
+.carousel-item {
+  min-height: 520px;
+}
+
+/* Buat caption center vertikal */
+.carousel-caption {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  align-items: auto;
+  padding-top: 80px;
+}
+
+/* Pastikan row penuh */
+.carousel-caption .row {
+  width: 100%;
+  align-items: auto;
+}
+
+/* Icon kiri */
+/* .board i img {
+  margin-top: 50px;
+  margin-bottom: 20px;
+} */
+
+/* Gambar kanan */
+.banner_img img {
+  max-width: 100%;
+  height: auto;
+}
+
+.loginadmin{
+    margin-left: 1000px;
+    margin-top: -50px;
+}

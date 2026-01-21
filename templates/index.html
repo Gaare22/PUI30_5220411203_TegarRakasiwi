@@ -17,6 +17,7 @@
       <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
       <!-- style css -->
       <link rel="stylesheet" href="{% static 'css/style.css' %}">
+      <link rel="stylesheet" href="{% static 'css/add_style.css' %}">
       <!-- Responsive-->
       <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
       <!-- fevicon -->
@@ -32,6 +33,8 @@
       <!-- header -->
       <div class="header">
          <div class="container-fluid">
+
+            <!-- OLD -->
             <div class="row d_flex">
                <div class=" col-md-2 col-sm-3 col logo_section">
                   <div class="full">
@@ -60,11 +63,12 @@
                   </nav>
                </div>
 
-               <div class=" col-md-2 col-sm-3 col logo_section" style="margin-left: 1000px; margin-top: -50px;">
+               <div class="loginadmin col-md-2 col-sm-3 col logo_section">
+               <!-- <div class=" col-md-2 col-sm-3 col logo_section" style="margin-left: 1000px; margin-top: -50px;"> -->
                   <nav class="navigation navbar navbar-expand-md navbar-dark ">
-                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                     <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
                      <span class="navbar-toggler-icon"></span>
-                     </button>
+                     </button> -->
                      <div class="collapse navbar-collapse" id="navbarsExample04">
                         <ul class="navbar-nav mr-auto">
                            <li class="nav-item">
@@ -76,8 +80,11 @@
                </div>
 
             </div>
+            <!-- BATAS OLD -->
+
          </div>
-      </div>
+      </div> 
+
       <!-- end header inner -->
       <!-- end header -->
       <!-- top -->
@@ -97,7 +104,7 @@
                            <!-- first slide -->
                            <div class="carousel-item active">
                               <div class="carousel-caption relative">
-                                 <div class="row d_flex">
+                                 <div class="infogabel row d_flex">
                                     <div  class="col-md-5">
                                        <div class="board">
                                           <i><img src="{% static 'img/top_icon.png'%}" alt="#"/></i>
@@ -109,9 +116,11 @@
                                           </div>
                                        </div>
                                     </div>
-                                    <div class="col-md-7">
+                                    <div class="ketgabel col-md-7">
                                        <div style="text-align: center;" class="banner_img">
-                                          <figure><img style="width: 60%; margin-top: 55px;" class="img_responsive" src="{% static 'img/VAK1.png' %}"></figure>
+                                          
+                                          <figure><img style="width: 60%;" class="img_responsive" src="{% static 'img/VAK1.png' %}"></figure>
+                                          <!-- <figure><img style="width: 60%; margin-top: 55px;" class="img_responsive" src="{% static 'img/VAK1.png' %}"></figure> -->
                                        </div>
                                     </div>
                                  </div>
@@ -120,10 +129,11 @@
                            <!-- second slide -->
                            <div class="carousel-item">
                             <div class="carousel-caption relative">
-                                <div class="row d_flex">
+                                <div class="infogabel row d_flex">
                                    <div  class="col-md-5">
                                       <div class="board">
-                                         <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i>
+                                         <i><img src="{% static 'img/top_icon.png'%}" alt="#"/></i>
+                                         <!-- <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i> -->
                                          <h3>
                                             GAYA<br> BELAJAR<br> VISUAL
                                          </h3>
@@ -132,9 +142,12 @@
                                          </div>
                                       </div>
                                    </div>
-                                   <div class="col-md-7">
+                                   <div class="ketgabel col-md-7">
                                       <div class="banner_img">
-                                         <figure><img style="width: 100%; margin-top: 40px;" class="img_responsive" src="{% static 'img/Visual.png' %}"></figure>
+                                          <img class="img-fluid" src="{% static 'img/Visual.png' %}">
+                                          <!-- <img class="img-fluid mt-3" src="{% static 'img/Visual.png' %}"> -->
+
+                                         <!-- <figure><img style="width: 100%; margin-top: 40px;" class="img_responsive" src="{% static 'img/Visual.png' %}"></figure> -->
                                       </div>
                                    </div>
                                 </div>
@@ -143,10 +156,11 @@
                            <!-- third slide-->
                            <div class="carousel-item">
                             <div class="carousel-caption relative">
-                                <div class="row d_flex">
+                                <div class="infogabel row d_flex">
                                    <div  class="col-md-5">
                                       <div class="board">
-                                         <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i>
+                                         <i><img src="{% static 'img/top_icon.png'%}" alt="#"/></i>
+                                         <!-- <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i> -->
                                          <h3>
                                             GAYA<br> BELAJAR<br> AUDITORI
                                          </h3>
@@ -155,9 +169,11 @@
                                          </div>
                                       </div>
                                    </div>
-                                   <div class="col-md-7">
+                                   <div class="ketgabel col-md-7">
                                       <div class="banner_img">
-                                         <figure><img style="width: 100%; margin-top: 50px;" class="img_responsive" src="{% static 'img/Auditori.png' %}"></figure>
+                                       <img class="img-fluid" src="{% static 'img/Auditori.png' %}">
+                                       <!-- <img class="img-fluid mt-3" src="{% static 'img/Auditori.png' %}"> -->
+                                         <!-- <figure><img style="width: 100%; margin-top: 50px;" class="img_responsive" src="{% static 'img/Auditori.png' %}"></figure> -->
                                       </div>
                                    </div>
                                 </div>
@@ -166,10 +182,11 @@
                            <!-- forth slide -->
                             <div class="carousel-item">
                                 <div class="carousel-caption relative">
-                                    <div class="row d_flex">
+                                    <div class="infogabel row d_flex">
                                        <div  class="col-md-5">
                                           <div class="board">
-                                             <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i>
+                                             <i><img src="{% static 'img/top_icon.png'%}" alt="#"/></i>
+                                             <!-- <i><img style="margin-top: 50px;" src="{% static 'img/top_icon.png'%}" alt="#"/></i> -->
                                              <h3>
                                                 GAYA<br> BELAJAR<br> KINESTETIK
                                              </h3>
@@ -178,21 +195,24 @@
                                              </div>
                                           </div>
                                        </div>
-                                       <div class="col-md-7">
+                                       <div class="ketgabel col-md-7">
                                           <div class="banner_img">
-                                             <figure><img style="width: 100%; margin-top: 50px;" class="img_responsive" src="{% static 'img/Kinestetik.png' %}"></figure>
+                                             <img class="img-fluid" src="{% static 'img/Kinestetik.png' %}">
+                                             <!-- <img class="img-fluid mt-3" src="{% static 'img/Kinestetik.png' %}"> -->
+                                             <!-- <figure><img style="width: 100%; margin-top: 50px;" class="img_responsive" src="{% static 'img/Kinestetik.png' %}"></figure> -->
                                           </div>
                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                         <!-- controls -->
-                        <a class="carousel-control-prev" style="margin-top: 20px;" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <i class="fa fa-arrow-left" aria-hidden="true"></i>
                         <span class="sr-only">Previous</span>
                         </a>
-                        <a class="carousel-control-next" style="margin-top: 20px;" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
                         <i class="fa fa-arrow-right" aria-hidden="true"></i>
                         <span class="sr-only">Next</span>
                         </a>
@@ -222,7 +242,7 @@
       <!-- Javascript files-->
       <script src="{% static 'js/jquery.min.js' %}"></script>
       <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
-      <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script>
+      <!-- <script src="{% static 'js/jquery-3.0.0.min.js' %}"></script> -->
       <!-- sidebar -->
       <script src="{% static 'js/custom.js' %}"></script>
       <script>

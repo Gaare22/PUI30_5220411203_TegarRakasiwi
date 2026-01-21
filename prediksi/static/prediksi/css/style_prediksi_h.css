@@ -1,10 +1,16 @@
 h2 {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 10px;
 }
+
+.judul{
+    margin-top: -10px;
+}
+
 table {
     width: 40%;
     margin-left: 25px;
+    margin-top: -380px;
     border-collapse: collapse;
 }
 td, th {
@@ -22,7 +28,6 @@ th {
 }
 .foto{
     margin-left: 550px;
-    margin-top: -1740px;
     width: 700px;
 }
 .form-grid {
@@ -47,4 +52,101 @@ th {
 .form-group select {
     width: 63%;
     padding: 5px;
+}
+
+
+@media (max-width: 768px){
+    .navbar-toggler {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    }
+
+    .nav{
+        margin-top: 400px;
+    }
+
+    .loginadmin{
+        display: none;
+    }
+
+    .judul{
+        margin-top: 30px;
+    }
+
+    .garisorange{
+        display: none;
+    }
+
+    header{
+        position: relative;
+    }
+
+    /* .kotakabu {
+    width: 95%;
+    max-width: 95%;
+    margin-top: 30px;
+    float: none;
+    position: absolute;
+    left: 20px;
+  } */
+
+    .form-grid {
+    display: flex;
+    flex-wrap: wrap;
+        }
+
+    .form-group {
+    width: 100%;
+    }
+
+    .form-group label{
+        font-size: 14px;
+    }
+
+    .form-group select, .form-group input{
+        width: 60%;
+    }
+
+    /* table{
+        position: static;
+        width: 90%;
+    } */
+
+  /* .foto {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-top: -3370px;
+  } */
+
+    /* .foto {
+    position: static;     KUNCI
+    display: block;
+    width: 90%;
+    max-width: 400px;
+    height: auto;
+    margin: 24px auto 0; center + jarak bawah form
+    }
+
+    .form-grid + .foto {
+    margin-top: 24px;
+    } */
+
+    .hasil-wrapper {
+    display: flex;
+    flex-direction: column; /* MOBILE: vertikal */
+    align-items: center;
+    }
+
+    .hasil-table {
+        width: 90%;
+        margin-top: 24px;
+    }
+
+    .foto {
+        width: 105%;
+        position: static;
+        max-width: 500px;
+        height: auto;
+        margin-left: auto !important;
+    }
+
 }

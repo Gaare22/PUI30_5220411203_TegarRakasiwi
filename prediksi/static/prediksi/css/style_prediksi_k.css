@@ -5,98 +5,185 @@
     width: 95%;
     margin: auto;
     }
+
+.form-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 10px;
+margin-bottom: 20px;
+}
+
+.form-group {
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+
+.form-group label {
+width: 40%;
+font-weight: bold;
+}
+
+.form-group input {
+width: 60%;
+padding: 5px;
+}
+
+.form-group select {
+width: 63%;
+padding: 5px;
+}
+
+.question {
+margin-bottom: 10px;
+margin-top: 15px;
+}
+
+.radio-group {
+display: flex;
+gap: 100px; /* Menambah jarak antar radio button */
+align-items: center;
+}
+
+.radio-group input {
+margin-right: 15px; /* Menambah jarak antara radio button dan teks */
+}
+
+@media (min-width: 769px){
+  .buttons {
+    display: flex !important;
+    /* justify-content: space-between; */
+    justify-content: end !important;
+    margin-top: 20px !important;
+  }
+
+  button {
+    padding: 10px 20px !important;
+    border: none !important;
+    background: black !important;
+    color: white !important;
+    cursor: pointer !important;
+    border-radius: 5px !important;
+    margin-right: 15px !important;
+  }
+}
+
+p,
+label {
+font-size: 14px;
+}
+
+.alert-success {
+color: #155724;
+background-color: #d4edda;
+border: 1px solid #c3e6cb;
+padding: 10px;
+margin-bottom: 15px;
+}
+
+.upload-container {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100vh;
+background-color: #f9f9f9;
+}
+
+.custom-file-upload {
+padding: 10px 20px;
+border: none;
+background: black;
+color: white;
+cursor: pointer;
+border-radius: 5px;
+margin-right: 15px;
+}
+
+.custom-file-upload:hover,
+.submit:hover {
+background-color: #f0390f;
+}
+
+input[type="file"] {
+display: none;
+}
+
+.alert-error {
+color: #000000;
+background-color: red;
+border: 1px solid #f5c6cb;
+padding: 10px;
+margin-bottom: 15px;
+}
+
+@media (max-width: 768px){
+    .garisorange{
+        display: none;
+    }
+
+    .kotakabu {
+    width: 90%;
+    max-width: 90%;
+    margin-top: 30px;
+    float: none;
+    position: absolute;
+    left: 20px;
+  }
+
     .form-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-    }
+    display: flex;
+    flex-wrap: wrap;
+        }
+
     .form-group {
+    width: 100%;
+    }
+
+    .form-group label{
+        font-size: 14px;
+    }
+
+    .form-group select, .form-group input{
+        width: 60%;
+    }
+
+      .radio-group {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    }
-    .form-group label {
-    width: 40%;
-    font-weight: bold;
-    }
-    .form-group input {
-    width: 60%;
-    padding: 5px;
-    }
-    .form-group select {
-    width: 63%;
-    padding: 5px;
-    }
-    .question {
-    margin-bottom: 10px;
-    margin-top: 15px;
-    }
-    .radio-group {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .radio-group label {
     display: flex;
-    gap: 100px; /* Menambah jarak antar radio button */
-    align-items: center;
+    align-items: center ;
+  }
+
+  .radio-group input[type="radio"] {
+    margin-right: 8px;
+  }
+
+  .question {
+  margin-bottom: 25px;
     }
-    .radio-group input {
-    margin-right: 15px; /* Menambah jarak antara radio button dan teks */
-    }
+
     .buttons {
     display: flex;
-    /* justify-content: space-between; */
-    justify-content: end;
-    margin-top: 20px;
-    }
-    button {
-    padding: 10px 20px;
-    border: none;
-    background: black;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-right: 15px;
-    }
-    p,
-    label {
-    font-size: 14px;
-    }
-    .alert-success {
-    color: #155724;
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    padding: 10px;
-    margin-bottom: 15px;
-    }
-    .upload-container {
-    display: flex;
-    align-items: center;
     justify-content: center;
-    height: 100vh;
-    background-color: #f9f9f9;
-    }
+    background: black !important;
+    color: white !important;
+  }
 
-    .custom-file-upload {
-    padding: 10px 20px;
-    border: none;
-    background: black;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    margin-right: 15px;
-    }
+  .buttons .submit {
+    width: 90%;
+    max-width: 320px;
+    padding: 14px 0;
+    font-size: 16px;
+    background: black !important;
+    color: white !important;
+  }
 
-    .custom-file-upload:hover,
-    .submit:hover {
-    background-color: #f0390f;
+  .navbar-toggler {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0,0,0,0.9)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
     }
-
-    input[type="file"] {
-    display: none;
-    }
-
-    .alert-error {
-    color: #000000;
-    background-color: red;
-    border: 1px solid #f5c6cb;
-    padding: 10px;
-    margin-bottom: 15px;
-    }
+}
